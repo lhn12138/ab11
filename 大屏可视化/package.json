@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@vue/cli": "^5.0.8",
+    "jquery": "^3.7.1",
+    "portal-vue": "^2.1.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "babel-loader": "^9.1.3"
+  }
+}
