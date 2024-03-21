@@ -23,7 +23,8 @@ SECRET_KEY = "django-insecure-b6_^pnf--n%5c=**x(u9_-rihkfum&e2)q%9+fb!w=gtxy0nsz
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+# 禁止自动添加斜杠
+APPEND_SLASH = False
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -37,7 +38,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "corsheaders",
     'register',
-    "myapp"
+    "myapp",
+    'rest_framework',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +56,7 @@ MIDDLEWARE = [
 ]
 CORS_ALLOW_CREDENTIALS = True  # 会话保持必须
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_METHODS =('*')
+CORS_ALLOW_METHODS = ('*')
 
 # CORS_ORIGIN_ALLOW_ALL = True  #允许所有的源跨域到django
 CORS_ORIGIN_WHITELIST = (
@@ -92,7 +95,6 @@ CORS_EXPOSE_HEADERS = (
 )
 # 缓存options请求
 CORS_PREFLIGHT_MAX_AGE = 86400  # 秒
-
 
 ROOT_URLCONF = "大屏可视化.urls"
 
@@ -167,3 +169,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = 'user.User'
