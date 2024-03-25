@@ -8,7 +8,7 @@ import {defineComponent} from "vue";
 // import centerRight1 from "@/views/centerRight1.vue";
 // import bottomRight from "@/views/bottomRight.vue";
 // import bottomLeft from "@/views/bottomLeft.vue";
-import App from "@/views/App.vue";
+import App from "@/views/test.vue";
 
 export default defineComponent({
   // components: {bottomLeft, bottomRight, centerRight1, centerRight2, center, centerLeft2, centerLeft1}
