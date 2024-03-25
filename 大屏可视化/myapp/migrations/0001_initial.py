@@ -33,8 +33,8 @@ class Migration(migrations.Migration):
                 ('spatial_score', models.CharField(default='', max_length=255, verbose_name='空间评分')),
                 ('comfort_score', models.CharField(default='', max_length=255, verbose_name='舒适性评分')),
                 ('manipulating_score', models.CharField(default='', max_length=255, verbose_name='操控评分')),
-                ('motivation_score', models.CharField(default='', max_length=255, verbose_name='动力评分')),
-                ('comprehensive_evaluation', models.CharField(default='', max_length=255, verbose_name='综合评价')),
+                ('motivation_score', models.CharField(default='',  max_length=255, verbose_name='动力评分')),
+                ('comprehensive_evaluation', models.TextField(default='', verbose_name='综合评价')),
                 ('createTime', models.DateTimeField(auto_now_add=True, verbose_name='创建时间')),
             ],
             options={

@@ -6,7 +6,7 @@
           <icon name="chart-line" class="text-icon"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2" style="font-size: 17px;">任务完成排行榜</span>
+          <span class="fs-xl text mx-2" style="font-size: 17px;">车型销量排行榜</span>
           <a v-on:click="oilClick" href="#"><span style="color: deepskyblue">油车</span></a>
           <a v-on:click="electricClick" href="#"><span style="color: #33cea0">电车</span></a>
 

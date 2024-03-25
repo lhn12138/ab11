@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="carinfo",
             name="comprehensive_evaluation",
-            field=models.CharField(default="", max_length=999999, verbose_name="综合评价"),
+            field=models.TextField(default="", verbose_name="综合评价"),
         ),
     ]

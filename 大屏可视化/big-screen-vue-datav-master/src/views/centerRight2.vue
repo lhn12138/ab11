@@ -9,8 +9,8 @@
       </div>
       <div class="d-flex ai-center flex-column body-box">
         <dv-capsule-chart class="dv-cap-chart" :config="config" v-bind:key="config.data[1].value"
-                          style="height: 200px"/>
-        <dv-active-ring-chart :config="configTwo" style="width:280px;height:210px"
+                          style="height: 185px"/>
+        <dv-active-ring-chart :config="configTwo" style="width:280px;height:180px"
                               v-bind:key="configTwo.data[0].value"/>
         <!--        <centerRight2Chart1 />-->
       </div>

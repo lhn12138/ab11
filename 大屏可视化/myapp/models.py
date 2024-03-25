@@ -1,9 +1,10 @@
 from django.db import models
 
+
 # Create your models here.
 class CarInfo(models.Model):
     id = models.AutoField('id', primary_key=True)
-    brand = models.CharField('品牌',max_length=255,default='')
+    brand = models.CharField('品牌', max_length=255, default='')
     carName = models.CharField('车名', max_length=255, default='')
     carImg = models.CharField('图片链接', max_length=255, default='')
     saleVolume = models.CharField('销量', max_length=255, default='')
@@ -22,16 +23,19 @@ class CarInfo(models.Model):
     comfort_score = models.CharField('舒适性评分', max_length=255, default='')
     manipulating_score = models.CharField('操控评分', max_length=255, default='')
     motivation_score = models.CharField('动力评分', max_length=255, default='')
-    comprehensive_evaluation = models.CharField('综合评价', max_length=999999, default='')
-    createTime=models.DateTimeField('创建时间',auto_now_add=True)
+    comprehensive_evaluation = models.TextField('综合评价', default='')
+    createTime = models.DateTimeField('创建时间', auto_now_add=True)
+
     class Meta:
         db_table = "carInfo"
 
-#用户
+
+# 用户
 class User(models.Model):
     id = models.AutoField('id', primary_key=True)
     username = models.CharField('用户名', max_length=255, default='')
     password = models.CharField('密码', max_length=255, default='')
     createTime = models.DateTimeField('创建时间', auto_now_add=True)
+
     class Meta:
         db_table = "user"

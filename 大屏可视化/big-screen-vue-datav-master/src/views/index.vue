@@ -9,7 +9,7 @@
             <dv-decoration-8 class="dv-dec-8" :color="decorationColor"/>
             <div class="title">
               <span class="title-text">大数据可视化平台</span>
-              <dv-decoration-5
+              <dv-decoration-4
                   class="dv-dec-6"
                   :reverse="true"
                   :color="['#50e3c2', '#67a1e5']"
@@ -29,7 +29,7 @@
           <div class="d-flex aside-width">
             <div class="react-left ml-4 react-l-s">
               <span class="react-left"></span>
-              <span class="text" style="cursor: pointer" @click="$router.push('/analysis1')">数据分析1</span>
+              <span class="text" style="font-size:30px;cursor: pointer" @click="$router.push('/analysis1')">首页</span>
             </div>
             <div class="react-left ml-3" style="cursor: pointer">
               <span class="text" style="cursor: pointer" @click="$router.push('/analysis2')">数据分析2</span>
@@ -47,49 +47,52 @@
             </div>
           </div>
         </div>
+        <div>
+          <logout/>
+        </div>
         <router-view></router-view>
-<!--        <div class="body-box">-->
-<!--          &lt;!&ndash; 第三行数据 &ndash;&gt;-->
-<!--          <div class="content-box">-->
-<!--            <div>-->
-<!--              <dv-border-box-6>-->
-<!--                <centerRight1/>-->
+        <!--        <div class="body-box">-->
+        <!--          &lt;!&ndash; 第三行数据 &ndash;&gt;-->
+        <!--          <div class="content-box">-->
+        <!--            <div>-->
+        <!--              <dv-border-box-6>-->
+        <!--                <centerRight1/>-->
 
-<!--              </dv-border-box-6>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--              <dv-border-box-12>-->
-<!--                <centerLeft2/>-->
-<!--              </dv-border-box-12>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; 中间 &ndash;&gt;-->
-<!--            <div>-->
-<!--              <center/>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; 中间 &ndash;&gt;-->
-<!--            <div>-->
-<!--              <dv-border-box-12>-->
-<!--                <centerLeft1/>-->
-<!--              </dv-border-box-12>-->
-<!--            </div>-->
-<!--            <div>-->
+        <!--              </dv-border-box-6>-->
+        <!--            </div>-->
+        <!--            <div>-->
+        <!--              <dv-border-box-12>-->
+        <!--                <centerLeft2/>-->
+        <!--              </dv-border-box-12>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash; 中间 &ndash;&gt;-->
+        <!--            <div>-->
+        <!--              <center/>-->
+        <!--            </div>-->
+        <!--            &lt;!&ndash; 中间 &ndash;&gt;-->
+        <!--            <div>-->
+        <!--              <dv-border-box-12>-->
+        <!--                <centerLeft1/>-->
+        <!--              </dv-border-box-12>-->
+        <!--            </div>-->
+        <!--            <div>-->
 
-<!--                <centerRight2/>-->
+        <!--                <centerRight2/>-->
 
-<!--            </div>-->
-<!--          </div>-->
+        <!--            </div>-->
+        <!--          </div>-->
 
-<!--          &lt;!&ndash; 第四行数据 &ndash;&gt;-->
-<!--          <div class="bottom-box">-->
-<!--            <dv-border-box-13>-->
+        <!--          &lt;!&ndash; 第四行数据 &ndash;&gt;-->
+        <!--          <div class="bottom-box">-->
+        <!--            <dv-border-box-13>-->
 
-<!--              <bottomRight/>-->
-<!--            </dv-border-box-13>-->
-<!--            <dv-border-box-12>-->
-<!--              <bottomLeft/>-->
-<!--            </dv-border-box-12>-->
-<!--          </div>-->
-<!--        </div>-->
+        <!--              <bottomRight/>-->
+        <!--            </dv-border-box-13>-->
+        <!--            <dv-border-box-12>-->
+        <!--              <bottomLeft/>-->
+        <!--            </dv-border-box-12>-->
+        <!--          </div>-->
+        <!--        </div>-->
       </div>
     </div>
   </div>
@@ -99,6 +102,7 @@
 import drawMixin from "../utils/drawMixin";
 import {formatTime} from '../utils/index.js'
 import router from "@/router";
+import logout from "@/views/logout.vue";
 // import centerLeft1 from './centerLeft1'
 // import centerLeft2 from './centerLeft2'
 // import centerRight1 from './centerRight1'
@@ -120,6 +124,7 @@ export default {
     }
   },
   components: {
+    logout,
     // centerLeft1,
     // centerLeft2,
     // centerRight1,

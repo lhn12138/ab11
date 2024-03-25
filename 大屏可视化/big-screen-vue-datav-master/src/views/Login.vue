@@ -17,7 +17,7 @@
       </div>
       <button type="submit">登录</button>
     </form>
-    <p>还没有账号?
+    <p>
       <router-link to="/register">注册</router-link>
     </p>
   </div>
@@ -45,8 +45,10 @@ export default {
           this.message = '登录成功';
           this.messageType = 'success';
           setTimeout(() => {
+            // 登录成功的逻辑
             router.push('/analysis1');
           }, 1000);
+
         } else {
           this.showMessage = true;
           this.message = resp.data.message;
@@ -59,69 +61,112 @@ export default {
         this.messageType = 'error';
       });
     }
+
   }
 }
 </script>
 
 <style scoped>
+
 body {
-  background-image: url("../assets/abc.png"); /* 替换为你的背景图路径 */
+  background-image: url("../assets/11.jpeg");
   background-size: cover;
   background-position: center;
-  background-attachment: fixed; /* 固定背景图 */
-}
-.login-container {
-  width: 300px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-image: url("../assets/abc.png");
-}
-.form-group {
-  margin-bottom: 15px;
-  background-color: rgba(255, 255, 255, 0.8); /* 调整透明度或者使用其他颜色 */
-  padding: 15px;
-  border-radius: 5px;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgba(240, 240, 240, 0.8);
 }
 
+.login-container {
+  width: 400px;
+  padding: 40px;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.login-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  background-color: rgba(245, 245, 245, 0.8);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
 label {
   display: block;
   margin-bottom: 5px;
+  font-weight: 600;
+  color: #333;
 }
 
 input[type="text"],
 input[type="password"] {
   width: 100%;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: 16px;
+  color: #333;
+  transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 button[type="submit"] {
-  padding: 8px 15px;
+  width: 100%;
+  padding: 12px 20px;
   background-color: #007bff;
   color: #fff;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
 }
 
 .message-container {
   position: fixed;
-  top: 50px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 9999;
 }
 
 .message {
-  padding: 10px;
+  padding: 15px 20px;
   border-radius: 5px;
   color: #fff;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .success {
@@ -130,5 +175,21 @@ button[type="submit"] {
 
 .error {
   background-color: #dc3545;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+}
+
+.login-footer a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-footer a:hover {
+  color: #0056b3;
 }
 </style>
