@@ -1,9 +1,13 @@
 <template>
   <div id="app">
-    <div class="container">
-      <BrandRanking :brands="brands" @brand-selected="handleBrandSelected" />
-      <BrandDetails v-if="selectedBrand" :brand="selectedBrand" />
-      <p v-else>请选择一个品牌查看详情</p>
+    <div class="app-container">
+      <div class="brand-ranking-container">
+        <BrandRanking :brands="brands" @brand-selected="handleBrandSelected" />
+      </div>
+      <div class="brand-details-container">
+        <BrandDetails v-if="selectedBrand" :brand="selectedBrand" />
+        <div v-else class="no-brand-selected">请选择一个品牌查看详情</div>
+      </div>
     </div>
   </div>
 </template>
@@ -73,7 +77,35 @@ export default {
 </script>
 
 <style>
-.container {
+.app-container {
   display: flex;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  padding: 40px;
+}
+
+.brand-ranking-container {
+  width: 25%;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.brand-details-container {
+  width: 70%;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.no-brand-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  color: #666;
 }
 </style>
