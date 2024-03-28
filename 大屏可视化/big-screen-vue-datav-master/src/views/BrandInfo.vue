@@ -4,7 +4,7 @@
       <div class="left-panel">
         <h3>品牌销量排行榜</h3>
         <ul>
-          <li v-for="(brand, index) in brandSalesData" :key="index" @click="updateCurrentBrand(brand)">
+          <li v-for="(brand, index) in brandSalesData" :key="index" @click="updateCurrentBrand(brand, index)" @mouseover="addShadow(index)" @mouseleave="removeShadow(index)">
             <span class="rank">{{ index + 1 }}.</span>
             <span class="brand-name">{{ brand.name }}</span>
             <span class="sales-volume">{{ brand.salesVolume }}</span>
@@ -12,15 +12,15 @@
         </ul>
       </div>
       <div class="right-panel">
-        <div class="brand-info" v-for="(brand, index) in brandSalesData" :key="index" v-show="currentIndex === index">
+        <div class="brand-info">
           <div class="brand-details">
             <div class="brand-info-left">
-              <h3>{{ brand.name }}</h3>
-              <p>厂商: {{ brand.manufacturer }}</p>
-              <p>车型: {{ brand.model }}</p>
-              <p>品牌: {{ brand.brand }}</p>
-              <p>价格: {{ brand.price }}</p>
-              <p>其他信息: {{ brand.otherInfo }}</p>
+              <h3>{{ brandDetails.name }}</h3>
+              <p>厂商: {{ brandDetails.manufacturer }}</p>
+              <p>车型: {{ brandDetails.model }}</p>
+              <p>品牌: {{ brandDetails.brand }}</p>
+              <p>价格: {{ brandDetails.price }}</p>
+              <p>其他信息: {{ brandDetails.otherInfo }}</p>
             </div>
             <div class="hexagon-chart">
               <!-- Echarts 六边形图 -->
@@ -93,7 +93,14 @@ export default {
       },
       currentIndex: 0,
       timer: null,
-
+      brandDetails: {
+        name: 'Brand A',
+        manufacturer: 'ABC 公司',
+        model: '轿车A型',
+        brand: 'Brand A',
+        price: '¥20,000',
+        otherInfo: '该车型采用节能环保技术,操控性能优秀。'
+      }
     }
   },
   mounted() {
@@ -102,10 +109,27 @@ export default {
 
   },
   methods: {
-    updateCurrentBrand(brand) {
+    updateCurrentBrand(brand, index) {
       this.currentBrand = brand
+      this.currentIndex = index
+      this.brandDetails = {
+        name: brand.name,
+        manufacturer: brand.manufacturer,
+        model: brand.model,
+        brand: brand.brand,
+        price: brand.price,
+        otherInfo: brand.otherInfo
+      }
       this.initHexagonChart()
       this.initLineChart()
+    },
+    addShadow(index) {
+      const li = document.querySelectorAll('.left-panel li')[index]
+      li.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)'
+    },
+    removeShadow(index) {
+      const li = document.querySelectorAll('.left-panel li')[index]
+      li.style.boxShadow = 'none'
     },
     initHexagonChart() {
       const hexagonChart = echarts.init(document.getElementById('hexagonChart'))
@@ -197,14 +221,14 @@ export default {
           data: ['2020', '2021', '2022', '2023'],
           axisLabel: {
             color: '#999999', // 设置 x 轴文字颜色为灰色
-            fontSize:18,
+            fontSize: 18,
           }
         },
         yAxis: {
           type: 'value',
           axisLabel: {
-            color: '#999999' ,// 设置 y 轴文字颜色为灰色
-            fontSize:18,
+            color: '#999999',// 设置 y 轴文字颜色为灰色
+            fontSize: 18,
 
           }
         },
@@ -236,7 +260,7 @@ export default {
 <style scoped>
 .brand-info-container {
   position: relative;
-  background-color: rgba(255, 255, 255, 0.18); /* 半透明的白色遮罩层 */
+  background-color: rgba(255, 255, 255, 0.18);
   padding: 20px;
 }
 
@@ -245,7 +269,7 @@ export default {
   justify-content: space-between;
   height: 150vh;
   padding: 20px;
-  background-color: transparent; /* 将背景设置为透明 */
+  background-color: transparent;
 }
 
 .left-panel {
@@ -253,6 +277,12 @@ export default {
   background-color: transparent;
   padding: 20px;
   margin-right: 20px;
+  border: 1px solid #ccc;
+  transition: transform 0.3s ease;
+}
+
+.left-panel:hover {
+  transform: translateY(-5px);
 }
 
 .left-panel ul {
@@ -266,16 +296,23 @@ export default {
   align-items: center;
   padding: 10px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .left-panel li:hover {
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 1);
 }
 
 .right-panel {
   flex: 2;
   background-color: transparent;
   padding: 20px;
+  border: 1px solid #ccc;
+  transition: transform 0.3s ease;
+}
+
+.right-panel:hover {
+  transform: translateY(-5px);
 }
 
 .brand-info,
