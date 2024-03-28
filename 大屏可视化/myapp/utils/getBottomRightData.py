@@ -1,7 +1,7 @@
 import json
 import re
 import time
-from .getPublicData import *
+from myapp.utils.getPublicData import getAllCars
 
 def getRankData():
     cars = list(getAllCars())

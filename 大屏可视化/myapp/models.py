@@ -29,3 +29,4 @@ class CarInfo(models.Model):
     class Meta:
         db_table = "carInfo"
 
+

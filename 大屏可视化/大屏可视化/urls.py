@@ -23,5 +23,5 @@ urlpatterns = [
     path('', include('register.urls')),
     path('user/', include("user.urls")),
     path('api/', include('user.urls')),
-    path('predict/', include("predict.urls")),
+    # path('predict/', include("predict.urls")),
 ]

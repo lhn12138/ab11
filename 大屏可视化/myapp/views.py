@@ -1,11 +1,13 @@
 from django.http import JsonResponse
-from django.shortcuts import render
-from .utils import getPublicData, getCenterLeftData
-from .utils import getCenterData
+
 from .utils import getBottomLeftData
-from .utils import getCenterRightData
-from .utils import getCenterChangeData
 from .utils import getBottomRightData
+from .utils import getCenterChangeData
+from .utils import getCenterData
+from .utils import getCenterLeftData
+from .utils import getCenterRightData
+from .utils import predict2
+from .utils.predict2 import predict_monthly_sales
 
 
 # Create your views here.
@@ -78,4 +80,12 @@ def bottomRight(request):
         return JsonResponse({
             'carData': carData
 
+        })
+
+
+def predict2(request):
+    if request.method == 'GET':
+        List = predict_monthly_sales()
+        return JsonResponse({
+            'List': List,
         })
