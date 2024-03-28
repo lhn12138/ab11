@@ -17,11 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("myapp/", include('myapp.urls')),
     path('', include('register.urls')),
     path('user/', include("user.urls")),
     path('api/', include('user.urls')),
+    path('predict/', include("predict.urls")),
 ]
