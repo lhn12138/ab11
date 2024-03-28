@@ -1,8 +1,16 @@
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from getPublicData import *
+from predict.utils.getPublicData import *
+import os
+import django
+from django.conf import settings
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'predict.settings')
+django.setup()
+
+if not settings.configured:
+    settings.configure(INSTALLED_APPS=['predict'])
 
 def predict_monthly_sales():
     # 从数据库中获取所有车型
