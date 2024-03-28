@@ -2,10 +2,11 @@
 import centerLeft1 from "@/views/centerLeft1.vue";
 import centerLeft2 from "@/views/centerLeft2.vue";
 import center from "@/views/center.vue";
-import bottomRight from "@/views/bottomRight.vue";
+// import bottomRight from "@/views/bottomRight.vue";
 import bottomLeft from "@/views/bottomLeft.vue";
 import centerRight2 from "@/views/centerRight2.vue";
 import centerRight1 from "@/views/centerRight1.vue";
+import app from "@/views/predict1.vue";
 
 export default {
   data() {
@@ -26,7 +27,8 @@ export default {
     centerRight2,
     center,
     bottomLeft,
-    bottomRight
+    // bottomRight,
+    app,
   },
 }
 </script>
@@ -67,7 +69,7 @@ export default {
     <div class="bottom-box">
       <dv-border-box-13>
 
-        <bottomRight/>
+        <app/>
       </dv-border-box-13>
       <dv-border-box-12>
         <bottomLeft/>

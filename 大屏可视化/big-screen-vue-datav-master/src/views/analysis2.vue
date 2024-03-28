@@ -10,7 +10,7 @@ import app from "@/views/predict1.vue";
 
 export default defineComponent({
   // components: {centerRight1, centerRight2, center, centerLeft2, centerLeft1}
-  comments: {app}
+  components: { app }
 })
 </script>
 <template>
