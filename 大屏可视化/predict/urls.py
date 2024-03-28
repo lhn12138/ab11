@@ -1,8 +1,9 @@
 from django.urls import path
+from . import views
 
-from predict import views
+
 urlpatterns = [
-    path("predict1/", views.predict1 ,name='predict1'),
+    path("predict1", views.predict1 ,name='predict1'),
 
 
 ]

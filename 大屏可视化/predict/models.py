@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 class Predict(models.Model):
     carName = models.CharField('车名', max_length=255, default=''),
@@ -13,4 +14,4 @@ class Predict(models.Model):
 
 
     class Meta:
-        db_table = "cleaned_data6"
+        db_table = "Predict"
