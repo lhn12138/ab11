@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "myapp",
     'rest_framework',
     'user',
-    'predict'
 ]
 
 MIDDLEWARE = [
