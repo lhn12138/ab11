@@ -89,9 +89,11 @@ def predict2(request):
         return JsonResponse({
             'List': List,
         })
+
+
 def predict22(request):
     if request.method == 'GET':
-        List = predict_sales()
+        List1 = predict_sales()
         return JsonResponse({
-            'List1': List,
+            'List1': List1,
         })

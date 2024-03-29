@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 # 读取CSV文件
 df = pd.read_csv('./cleaned/cleaned_data1.csv')
 
+# 转换数据类型
 df['min_price'] = df['min_price'].astype(float)
 df['max_price'] = df['max_price'].astype(float)
 
@@ -55,7 +56,7 @@ for brand in brands:
                 continue
 
             # 遍历价格区间并进行预测
-            for price_range in df['price_range'].unique():
+            for price_range in brand_df['price_range'].unique():
                 # 构建测试数据
                 test_data = pd.DataFrame({
                     'carModel': [car_model_map[car_model]],
@@ -67,8 +68,8 @@ for brand in brands:
                 predicted_sales = int(model.predict(test_data)[0])
 
                 # 存储预测结果
-                results.append((brand, car_model, price_range, energy_type, predicted_sales))
+                results.append(f"{brand} {car_model} {price_range} {energy_type}: {predicted_sales}")
 
 # 打印预测结果
-
-print(results)
+for result in results:
+    print(result)

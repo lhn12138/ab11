@@ -35,10 +35,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: "App1",
   data() {
     return {
+      cars: [],
       brands: [],
       models: [],
       priceRanges: [],
@@ -52,42 +55,51 @@ export default {
     }
   },
   async created() {
-    // 从后端获取初始数据
-    const res = await this.$http.get("myapp/predict22");
-    this.initData(res.data);
+    try {
+      // 从后端获取初始数据
+      const res = await axios.get("myapp/predict22/");
+      this.cars = res.data.List;
+
+      // 确保数据加载完成后再调用 initData 方法
+      if (this.cars && this.cars.length > 0) {
+        this.initData();
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   },
   methods: {
-    initData(data) {
+    initData() {
       // 初始化下拉框选项
-      this.brands = [...new Set(data.map(item => item.brand))];
-      this.models = [...new Set(data.map(item => item.car_model))];
-      this.priceRanges = [...new Set(data.map(item => item.price_range))];
-      this.energyTypes = [...new Set(data.map(item => item.energy_type))];
+      this.brands = [...new Set(this.cars.map(item => item.brand))];
+      this.models = [...new Set(this.cars.map(item => item.car_model))];
+      this.priceRanges = [...new Set(this.cars.map(item => item.price_range))];
+      this.energyTypes = [...new Set(this.cars.map(item => item.energy_type))];
     },
     onBrandChange() {
       // 根据选择的品牌更新车型下拉框
-      this.models = [...new Set(this.data.filter(item => item.brand === this.selectedBrand).map(item => item.car_model))];
+      this.models = [...new Set(this.cars.filter(item => item.brand === this.selectedBrand).map(item => item.car_model))];
     },
     onModelChange() {
-      // 根据选择的车型更新其他下拉框
-      this.priceRanges = [...new Set(this.data.filter(item => item.car_model === this.selectedModel).map(item => item.price_range))];
-      this.energyTypes = [...new Set(this.data.filter(item => item.car_model === this.selectedModel).map(item => item.energy_type))];
+// 根据选择的车型更新其他下拉框
+      this.priceRanges = [...new Set(this.cars.filter(item => item.car_model === this.selectedModel).map(item => item.price_range))];
+      this.energyTypes = [...new Set(this.cars.filter(item => item.car_model === this.selectedModel).map(item => item.energy_type))];
     },
     async predictSales() {
-      // 根据选择的条件从后端获取预测结果
-      const res = await this.$http.get("myapp/predict22", {
-        params: {
-          brand: this.selectedBrand,
-          car_model: this.selectedModel,
-          price_range: this.selectedPriceRange,
-          energy_type: this.selectedEnergyType
-        }
+// 根据选择的条件从后端获取预测结果
+      const res = await axios.post("myapp/predict22/", {
+        brand: this.selectedBrand,
+        car_model: this.selectedModel,
+        price_range: this.selectedPriceRange,
+        energy_type: this.selectedEnergyType
       });
-      this.predictedSales = res.data.predicted_sales;
+      this.predictedSales = res.data.predictedSales;
       this.showPredictedSales = true;
     }
   }
 }
+
+
 </script>
 <style>
 .container {
