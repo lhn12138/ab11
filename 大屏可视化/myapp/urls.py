@@ -10,5 +10,6 @@ urlpatterns = [
     path("centerRightChange/<int:energyType>", views.centerRightChange, name='centerRightChange'),
     path("bottomRight/", views.bottomRight, name='bottomRight'),
     path("predict2/", views.predict2, name='predict2'),
+    path("predict22/", views.predict22, name='predict22'),
 
 ]

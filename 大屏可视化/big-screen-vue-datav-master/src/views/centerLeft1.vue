@@ -13,23 +13,6 @@
       <div class="d-flex jc-center">
         <CenterLeft1Chart />
       </div>
-      <!-- 4个主要的数据 -->
-<!--      <div class="bottom-data">-->
-<!--        <div-->
-<!--          class="item-box mt-2"-->
-<!--          v-for="(item, index) in numberData"-->
-<!--          :key="index"-->
-<!--        >-->
-<!--          <div class="d-flex">-->
-<!--            <span class="coin">￥</span>-->
-<!--            <dv-digital-flop class="dv-digital-flop" :config="item.number" />-->
-<!--          </div>-->
-<!--          <p class="text" style="text-align: center;">-->
-<!--            {{ item.text }}-->
-<!--            <span class="colorYellow">(件)</span>-->
-<!--          </p>-->
-<!--        </div>-->
-<!--      </div>-->
     </div>
   </div>
 </template>
@@ -114,7 +97,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$box-width: 338px;
+$box-width: 438px;
 $box-height: 410px;
 
 #centerLeft1 {

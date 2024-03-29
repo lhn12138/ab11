@@ -45,7 +45,8 @@ export default {
             radius: ["0%", "65%"],
             name: {
               textStyle: {
-                color: "rgb(238, 197, 102)"
+                color: "rgb(238, 197, 102)",
+
               }
             },
             splitLine: {

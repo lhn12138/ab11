@@ -5,22 +5,19 @@
         <span>
           <icon name="align-left" class="text-icon"></icon>
         </span>
-        <span class="fs-xl text mx-2" style="font-size: 17px;">汽车销售价格分布</span>
+        <span class="fs-xl text mx-2" style="font-size: 28px;">汽车销售价格分布</span>
       </div>
       <div class="d-flex ai-center flex-column body-box">
         <dv-capsule-chart class="dv-cap-chart" :config="config" v-bind:key="config.data[1].value"
-                          style="height: 185px"/>
-        <dv-active-ring-chart :config="configTwo" style="width:280px;height:180px"
-                              v-bind:key="configTwo.data[0].value"/>
-        <!--        <centerRight2Chart1 />-->
+                          style="height: 300px" />
+        <dv-active-ring-chart :config="configTwo" style="width:280px;height:180px;"
+                              v-bind:key="configTwo.data[0].value" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import centerRight2Chart1 from '@/components/echart/centerRight/centerRightChart'
-
 export default {
   data() {
     return {
@@ -45,20 +42,22 @@ export default {
           {
             name: '西峡',
             value: 98
-          },
-
+          }
         ],
-        unit: '台'
+        unit: '台',
+        titleStyle: {
+          fontSize: 14
+        }
       },
       configTwo: {
         data: [
           {
             name: '南阳',
             value: 167
-          },
+          }
         ],
-        radius: '60%',
-        activeRadius: '70%',
+        radius: '70%',
+        activeRadius: '90%'
       }
     }
   },
@@ -66,33 +65,37 @@ export default {
     const res = await this.$http.get('myapp/centerRight')
     this.$set(this.config, 'data', res.data.realData)
     this.$set(this.configTwo, 'data', res.data.realData)
-
-    // console.log(res)
-  },
-  components: {
-    // centerRight2Chart1
   }
 }
 </script>
 
 <style lang="scss" scoped>
 #centerRight2 {
-  $box-height: 410px;
-  $box-width: 340px;
-  padding: 5px;
+  $box-height: 650px;
+  $box-width: 100%;
+padding: 20px 16px;
   height: $box-height;
   width: $box-width;
   border-radius: 5px;
-
   .bg-color-black {
-    padding: 5px;
-    height: $box-height;
-    width: $box-width;
+    height: $box-height  35px;
     border-radius: 10px;
+    //height: $box-height;
+    width: $box-width;
+    //border-radius: 5px;
   }
+  //.bg-color-black {
+  //  height: $box-height - 35px;
+  //
+  //  padding: 5px;
+  //  //height: $box-height;
+  //  width: $box-width;
+  //  border-radius: 10px;
+  //}
 
   .text {
     color: #c3cbde;
+
   }
 
   .body-box {
@@ -101,7 +104,7 @@ export default {
 
     .dv-cap-chart {
       width: 100%;
-      height: 160px;
+      height: 600px;
     }
   }
 }

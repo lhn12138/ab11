@@ -6,7 +6,7 @@ from .utils import getCenterChangeData
 from .utils import getCenterData
 from .utils import getCenterLeftData
 from .utils import getCenterRightData
-from .utils import predict2
+from .utils.predict22 import predict_sales
 from .utils.predict2 import predict_monthly_sales
 
 
@@ -88,4 +88,10 @@ def predict2(request):
         List = predict_monthly_sales()
         return JsonResponse({
             'List': List,
+        })
+def predict22(request):
+    if request.method == 'GET':
+        List = predict_sales()
+        return JsonResponse({
+            'List1': List,
         })

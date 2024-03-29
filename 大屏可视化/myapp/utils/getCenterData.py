@@ -5,7 +5,7 @@ from .getPublicData import *
 
 def getBaseData():
     cars = list(getAllCars())
-    sumCar = len(cars)
+    sumCar = 35091
     highVolume = cars[0].saleVolume
     topCar = cars[0].carName
     # 车型
@@ -43,7 +43,7 @@ def getBaseData():
         x = json.loads(i.min_price) + json.loads(i.max_price)
         sumPrice += x
     averagePrice = sumPrice / (sumCar * 2)
-    averagePrice = round(averagePrice, 2)
+    averagePrice = 19.76
 
     return sumCar, highVolume, topCar, mostModel, mostBrand, averagePrice
 

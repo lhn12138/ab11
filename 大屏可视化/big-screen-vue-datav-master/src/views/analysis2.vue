@@ -6,16 +6,16 @@ import {defineComponent} from "vue";
 // import center from "@/views/center.vue";
 // import centerRight2 from "@/views/centerRight2.vue";
 // import centerRight1 from "@/views/centerRight1.vue";
-import app from "@/views/predict1.vue";
+// import app from "@/views/predict1.vue";
 
 export default defineComponent({
   // components: {centerRight1, centerRight2, center, centerLeft2, centerLeft1}
-  components: { app }
+  // components: { app }
 })
 </script>
 <template>
   <div class="body-box">
-    <app/>
+<!--    <app/>-->
   </div>
 </template>
 <style lang="scss" scoped>
