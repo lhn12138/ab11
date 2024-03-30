@@ -13,127 +13,24 @@ export default {
     return {
       isHovered: true,
       cdata: {
-        category: [
-          "市区",
-          "万州",
-          "江北",
-          "南岸",
-          "北碚",
-          "綦南",
-          "长寿",
-          "永川",
-          "璧山",
-          "江津",
-          "城口",
-          "大足",
-          "垫江",
-          "丰都",
-          "奉节",
-          "合川",
-          "江津区",
-          "开州",
-          "南川",
-          "彭水",
-          "黔江",
-          "石柱",
-          "铜梁",
-          "潼南",
-          "巫山",
-          "巫溪",
-          "武隆",
-          "秀山",
-          "酉阳",
-          "云阳",
-          "忠县",
-          "川东",
-          "检修"
-        ],
-        lineData: [
-          18092,
-          20728,
-          24045,
-          28348,
-          32808,
-          36097,
-          39867,
-          44715,
-          48444,
-          50415,
-          56061,
-          62677,
-          59521,
-          67560,
-          18092,
-          20728,
-          24045,
-          28348,
-          32808,
-          36097,
-          39867,
-          44715,
-          48444,
-          50415,
-          36097,
-          39867,
-          44715,
-          48444,
-          50415,
-          50061,
-          32677,
-          49521,
-          32808
-        ],
-        barData: [
-          4600,
-          5000,
-          5500,
-          6500,
-          7500,
-          8500,
-          9900,
-          12500,
-          14000,
-          21500,
-          23200,
-          24450,
-          25250,
-          33300,
-          4600,
-          5000,
-          5500,
-          6500,
-          7500,
-          8500,
-          9900,
-          22500,
-          14000,
-          21500,
-          8500,
-          9900,
-          12500,
-          14000,
-          21500,
-          23200,
-          24450,
-          25250,
-          7500
-        ],
+        category: [],
+        lineData: [],
+        barData: [],
         rateData: []
-      }
+      },
+      currentIndex: 0
     };
   },
   components: {
     // Chart,
   },
   async mounted() {
-    const res = await this.$http.get('myapp/data3')
-    this.$set(this.cdata, 'category', res.data.yearList)
+    const res = await this.$http.get('myapp/data2')
+    this.$set(this.cdata, 'category', res.data.yearsList)
     this.$set(this.cdata, 'lineData', res.data.rateList)
     this.$set(this.cdata, 'barData', res.data.volumeList)
-    // console.log(this.cdata.category)
-    // console.log(res)
-    // this.setData();
-    // this.initChart()
+    this.initChart()
+    this.stratDataUpdateInterval()
   },
 
   updated() {
@@ -142,18 +39,14 @@ export default {
 
   },
   methods: {
-    // 根据自己的业务情况修改
-    // setData () {
-    //   for (let i = 0; i < this.cdata.barData.length -1; i++) {
-    //     let rate = this.cdata.barData[i] / this.cdata.lineData[i];
-    //     this.cdata.rateData.push(rate.toFixed(2));
-    //   }
-    // },
+
     startAction() {
       this.isHovered = false
+      this.stratDataUpdateInterval()
     },
     cancelAction() {
       this.isHovered = true
+      this.stratDataUpdateInterval()
     },
     initChart() {
       this.myChart = this.$echarts.init(this.$refs.chart);
@@ -183,7 +76,7 @@ export default {
           data: ["同比变化", "销售情况"],
           textStyle: {
             color: "#B4B4B4",
-            fontSize:20
+            fontSize: 20
           },
           top: "0%"
         },
@@ -193,15 +86,16 @@ export default {
           y: "4%"
         },
         xAxis: {
-          data: this.cdata.category,
+          data: this.cdata.category.slice(this.currentIndex, this.currentIndex + 12),
           axisLine: {
             lineStyle: {
-              color: "#B4B4B4"
+              color: "#ea3131"
             }
           },
           axisLabel: {
             show: true,
-            interval: 0
+            interval: 0,
+            fontSize: 15
           },
           axisTick: {
             show: false
@@ -212,7 +106,7 @@ export default {
             splitLine: {show: false},
             axisLine: {
               lineStyle: {
-                color: "#B4B4B4"
+                color: "#d76d6d"
               }
             },
 
@@ -224,7 +118,7 @@ export default {
             splitLine: {show: false},
             axisLine: {
               lineStyle: {
-                color: "#B4B4B4"
+                color: "#c07979"
               }
             },
             axisLabel: {
@@ -245,12 +139,12 @@ export default {
               normal: {
                 barBorderRadius: 5,
                 color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {offset: 0, color: "#5C4033"},
-                  {offset: 1, color: "#FAEBD7"}
+                  {offset: 0, color: "#e06024"},
+                  {offset: 1, color: "#ab885c"}
                 ])
               }
             },
-            data: this.cdata.lineData
+            data: this.cdata.lineData.slice(this.currentIndex, this.currentIndex + 12)
           },
           {
             name: "销售情况",
@@ -260,12 +154,12 @@ export default {
               normal: {
                 barBorderRadius: 5,
                 color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {offset: 0, color: "#082e53"},
+                  {offset: 0, color: "#3e7cb9"},
                   {offset: 1, color: "white"}
                 ])
               }
             },
-            data: this.cdata.barData
+            data: this.cdata.barData.slice(this.currentIndex, this.currentIndex + 12)
           },
         ]
       }
@@ -279,42 +173,44 @@ export default {
       x[x.length - 1] = st
     },
     updateBarChart() {
-      if (this.isHovered == true) {
-        this.changeData(this.cdata.category)
-        this.changeData(this.cdata.lineData)
-        this.changeData(this.cdata.barData)
-        // console.log(this.cdata.category)
+      if (this.isHovered) {
+        this.currentIndex = (this.currentIndex + 1) % this.cdata.category.length
+        if (this.currentIndex + 12 > this.cdata.category.length) {
+          this.currentIndex = 0
+        }
+        // console.log('currentIndex:', this.currentIndex)
         this.myChart.setOption({
           xAxis: {
-            data: this.cdata.category
+            data: this.cdata.category.slice(this.currentIndex, this.currentIndex + 12)
           },
           series: [
             {
-              data: this.cdata.lineData
+              data: this.cdata.lineData.slice(this.currentIndex, this.currentIndex + 12)
             },
             {
-              data: this.cdata.barData
+              data: this.cdata.barData.slice(this.currentIndex, this.currentIndex + 12)
             }
-          ],
+          ]
         })
-
       } else {
         clearInterval(this.timer)
-
       }
-
-
     },
+
     stratDataUpdateInterval() {
-      if (this.isHovered == true) {
+      if (this.isHovered) {
         const interval = 2500
         clearInterval(this.timer)
-        setInterval(this.updateBarChart, interval)
+        console.log('Timer started')
+        this.timer = setInterval(this.updateBarChart, interval)
+      } else {
+        console.log('Timer stopped')
+        clearInterval(this.timer)
+        this.updateBarChart()
       }
     }
-
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -73,6 +73,7 @@ export default {
       <dv-border-box-13>
         <!--        <app/>-->
         <app1/>
+<!--        <bottom-left/>-->
       </dv-border-box-13>
       <dv-border-box-9>
         <centerRight2/>

@@ -1,18 +1,17 @@
 <template>
-  <div id="bottomRight">
+  <div id="bottomRight1">
     <div class="bg-color-black">
       <div class="d-flex pt-2 pl-2">
         <span>
           <icon name="chart-area" class="text-icon"></icon>
         </span>
         <div class="d-flex">
-          <span class="fs-xl text mx-2"><h1 style="font-size: 27px;">品牌年份排行榜</h1></span>
+          <span class="fs-xl text mx-2"><h1 style="font-size: 27px;">品牌月份排行榜</h1></span>
           <div class="decoration2">
             <dv-decoration-2 :reverse="true" style="width:5px;height:6rem;"/>
           </div>
-
           <div class="search-box ml-auto mr-2">
-            <input type="text" v-model="searchKeyword" placeholder="请输入年份、国家或品牌搜索"
+            <input type="text" v-model="searchKeyword" placeholder="请输入年月、国家或品牌搜索"
                    class="large-input">
           </div>
         </div>
@@ -20,24 +19,18 @@
       <div class="row_list">
         <ul class="car_rank" :style="{maxHeight: '450px', overflowY: 'auto'}">
           <li class="header">
-
             <div>销售排名</div>
-            <div>年份</div>
-            <div>图片</div>
+            <div>年月</div>
             <div>品牌信息</div>
             <div>销量</div>
-
-
           </li>
           <li v-for="car in filteredCarData" :key="car.rank">
             <div class="list_index1">{{ car.rank }}</div>
-            <div class="list_index">{{ car.year }}</div>
-            <div class="list_img"><img :src="car.logo" alt=""></div>
+            <div class="list_index">{{ car.years }}</div>
             <div class="list_info">
               <p>{{ car.country }}/{{ car.brand }}</p>
             </div>
             <div class="list_saleVolume">{{ car.sales }}辆</div>
-
           </li>
         </ul>
       </div>
@@ -54,14 +47,13 @@ export default {
     }
   },
   computed: {
-
     filteredCarData() {
       if (!this.searchKeyword) {
         return this.CarData.map((car, index) => ({...car, rank: index + 1}));
       } else {
         const keyword = this.searchKeyword.toLowerCase();
         return this.CarData.filter(car =>
-            car.year.toString().includes(keyword) ||
+            car.years.toString().includes(keyword) ||
             car.country.toLowerCase().includes(keyword) ||
             car.brand.toLowerCase().includes(keyword)
         ).map((car, index) => ({...car, rank: index + 1}));
@@ -69,8 +61,8 @@ export default {
     }
   },
   async mounted() {
-    const res = await this.$http.get('myapp/getData');
-    this.CarData = res.data.carData1;
+    const res = await this.$http.get('myapp/data1');
+    this.CarData = res.data.carData2;
     // console.log('CarData:', this.CarData);
   }
 };
@@ -79,7 +71,7 @@ export default {
 <style lang="scss" class>
 $box-height: 520px;
 $box-width: 100%;
-#bottomRight {
+#bottomRight1 {
   padding: 14px 16px;
   height: $box-height;
   width: $box-width;

@@ -13,8 +13,8 @@ class spiders1(object):
         }
 
     def init(self):
-        if not os.path.exists('./temp1.csv'):
-            with open('./temp1.csv', 'a', newline='', encoding='utf-8') as wf:
+        if not os.path.exists('cleaned_data5.csv'):
+            with open('cleaned_data5.csv', 'a', newline='', encoding='utf-8') as wf:
                 writer = csv.writer(wf)
                 writer.writerow(["日期", "销量", "同比"])
 
@@ -47,7 +47,7 @@ class spiders1(object):
                 self.save_to_csv(car)
 
     def save_to_csv(self, resultData):
-        with open('./temp1.csv', 'a', newline='', encoding='utf-8') as f:
+        with open('cleaned_data5.csv', 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(resultData)
 

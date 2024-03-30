@@ -8,6 +8,10 @@ from .utils import getCenterLeftData
 from .utils import getCenterRightData
 from .utils.predict22 import predict_sales
 from .utils.predict2 import predict_monthly_sales
+from .utils.data3 import read_csv_data3
+from .utils.data2 import read_csv_data2
+from .utils.getData import read_csv_data
+from .utils.data1 import read_csv_data1
 
 
 # Create your views here.
@@ -96,4 +100,38 @@ def predict22(request):
         List1 = predict_sales()
         return JsonResponse({
             'List1': List1,
+        })
+
+def data3(request):
+    if request.method == 'GET':
+        yearList, volumeList, rateList = read_csv_data3()
+        return JsonResponse({
+            'yearList': yearList,
+            'volumeList': volumeList,
+            'rateList': rateList,
+        })
+
+def data2(request):
+    if request.method == 'GET':
+        yearsList, volumeList, rateList = read_csv_data2()
+        return JsonResponse({
+            'yearsList': yearsList,
+            'volumeList': volumeList,
+            'rateList': rateList,
+        })
+
+def getData(request):
+    if request.method == 'GET':
+        carData1 = read_csv_data()
+        return JsonResponse({
+            'carData1': carData1
+
+        })
+
+def data1(request):
+    if request.method == 'GET':
+        carData2 = read_csv_data1()
+        return JsonResponse({
+            'carData2': carData2
+
         })
