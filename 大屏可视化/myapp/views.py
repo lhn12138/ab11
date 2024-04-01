@@ -12,6 +12,7 @@ from .utils.data3 import read_csv_data3
 from .utils.data2 import read_csv_data2
 from .utils.getData import read_csv_data
 from .utils.data1 import read_csv_data1
+from .utils.data4 import read_csv_data4
 
 
 # Create your views here.
@@ -133,5 +134,13 @@ def data1(request):
         carData2 = read_csv_data1()
         return JsonResponse({
             'carData2': carData2
+
+        })
+
+def data4(request):
+    if request.method == 'GET':
+        carData4 = read_csv_data4()
+        return JsonResponse({
+            'carData4': carData4
 
         })

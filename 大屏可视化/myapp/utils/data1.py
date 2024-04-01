@@ -32,7 +32,3 @@ def read_csv_data1():
         current_rank += 1
 
     return result
-
-data = read_csv_data1()
-for item in data:
-    print(item)

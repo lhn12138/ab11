@@ -4,35 +4,47 @@
       <div class="left-panel">
         <h3>品牌销量排行榜</h3>
         <ul>
-          <li v-for="(brand, index) in brandSalesData" :key="index" @click="updateCurrentBrand(brand, index)" @mouseover="addShadow(index)" @mouseleave="removeShadow(index)">
-            <span class="rank">{{ index + 1 }}.</span>
-            <span class="brand-name">{{ brand.name }}</span>
-            <span class="sales-volume">{{ brand.salesVolume }}</span>
+          <li v-for="(car, index) in displayedCars" :key="index" @click="updateCurrentCar(car, index)"
+              :class="{ 'active': currentIndex === index }">
+            <span class="rank">{{ car.rank }}.</span>
+            <span class="brand-name">{{ car.carName }}</span>
+            <span class="sales-volume">{{ car.saleVolume }}</span>
           </li>
         </ul>
+        <div class="pagination">
+          <button @click="prevPage" :disabled="currentPage === 1">上一页</button>
+          <span>第 {{ currentPage }} 页</span>
+          <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
+        </div>
       </div>
       <div class="right-panel">
         <div class="brand-info">
           <div class="brand-details">
             <div class="brand-info-left">
-              <h3>{{ brandDetails.name }}</h3>
-              <p>厂商: {{ brandDetails.manufacturer }}</p>
-              <p>车型: {{ brandDetails.model }}</p>
-              <p>品牌: {{ brandDetails.brand }}</p>
-              <p>价格: {{ brandDetails.price }}</p>
-              <p>其他信息: {{ brandDetails.otherInfo }}</p>
+              <h3>{{ currentCar.carName }}</h3>
+              <div class="car-info-row">
+                <p>制造商: {{ currentCar.manufacturer }}</p>
+                <p>车型: {{ currentCar.carModel }}</p>
+                <p>品牌: {{ currentCar.brand }}</p>
+              </div>
+              <div class="car-info-row">
+                <p>价格: {{ currentCar.min_price }} - {{ currentCar.max_price }} 万元</p>
+                <p>上市时间: {{ currentCar.marketTime }}</p>
+                <p>综合评分: {{ currentCar.over_score }}</p>
+              </div>
+              <div class="car-image-container">
+                <img :src="currentCar.carImg" :alt="currentCar.carName" class="car-image">
+              </div>
             </div>
             <div class="hexagon-chart">
-              <!-- Echarts 六边形图 -->
-              <div id="hexagonChart" style="width: 100%; height: 300px;"></div>
+              <radar-chart :data="radarData"></radar-chart>
+              <p>综合评价: {{ currentCar.comprehensive_evaluation }}</p>
             </div>
+
           </div>
-        </div>
-        <div class="sales-history">
-          <h3>历史销量</h3>
           <div class="line-chart">
-            <!-- Echarts 折线图 -->
-            <div id="lineChart" style="width: 100%; height: 300px;"></div>
+            <line-chart :data="historicalSalesData" :labels="historicalSalesLabels"></line-chart>
+            <p>历史销量</p>
           </div>
         </div>
       </div>
@@ -41,222 +53,80 @@
 </template>
 
 <script>
-import * as echarts from 'echarts'
+import RadarChart from '@/components/RadarChart.vue'
+import LineChart from '@/components/LineChart.vue'
 
 export default {
+  components: {
+    RadarChart,
+    LineChart
+  },
   data() {
     return {
-      brandSalesData: [
-        {
-          name: 'Brand A',
-          salesVolume: 1000,
-          radarData: [4300, 10000, 28000, 35000, 50000, 19000],
-          lineChartData: [820, 932, 901, 934],
-          manufacturer: 'ABC 公司',
-          model: '轿车A型',
-          brand: 'Brand A',
-          price: '¥20,000',
-          otherInfo: '该车型采用节能环保技术,操控性能优秀。'
-        },
-        {
-          name: 'Brand B',
-          salesVolume: 800,
-          radarData: [3800, 12000, 25000, 32000, 48000, 22000],
-          lineChartData: [780, 850, 920, 1000],
-          manufacturer: 'XYZ 公司',
-          model: '轿车B型',
-          brand: 'Brand B',
-          price: '¥25,000',
-          otherInfo: '该车型配置豪华,适合家庭使用。'
-        },
-        {
-          name: 'Brand C',
-          salesVolume: 600,
-          radarData: [3200, 9000, 24000, 30000, 45000, 20000],
-          lineChartData: [650, 730, 800, 880],
-          manufacturer: '123 公司',
-          model: '轿车C型',
-          brand: 'Brand C',
-          price: '¥18,000',
-          otherInfo: '该车型外观时尚,动力性能出色。'
-        }
-      ],
-      currentBrand: {
-        name: 'Brand A',
-        radarData: [4300, 10000, 28000, 35000, 50000, 19000],
-        lineChartData: [820, 932, 901, 934],
-        manufacturer: 'ABC 公司',
-        model: '轿车A型',
-        brand: 'Brand A',
-        price: '¥20,000',
-        otherInfo: '该车型采用节能环保技术,操控性能优秀。'
-      },
+      carData: [],
+      currentCar: null,
       currentIndex: 0,
-      timer: null,
-      brandDetails: {
-        name: 'Brand A',
-        manufacturer: 'ABC 公司',
-        model: '轿车A型',
-        brand: 'Brand A',
-        price: '¥20,000',
-        otherInfo: '该车型采用节能环保技术,操控性能优秀。'
-      }
+      radarData: [],
+      currentPage: 1,
+      pageSize: 17,
+      historicalSales: [], // 新增历史销量数据属性
+
+    }
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.carData.length / this.pageSize)
+    },
+    displayedCars() {
+      const startIndex = (this.currentPage - 1) * this.pageSize
+      const endIndex = startIndex + this.pageSize
+      return this.carData.slice(startIndex, endIndex)
     }
   },
   mounted() {
-    this.initHexagonChart()
-    this.initLineChart()
-
+    this.fetchCarData()
   },
   methods: {
-    updateCurrentBrand(brand, index) {
-      this.currentBrand = brand
+    async fetchCarData() {
+      const res = await this.$http.get('myapp/bottomRight')
+      this.carData = res.data.carData
+
+      const salesData = await this.$http.get('myapp/data4')
+      this.historicalSales = salesData.data.carData4
+
+      this.updateCurrentCar(this.carData[0], 0)
+    },
+    updateCurrentCar(car, index) {
+      this.currentCar = car
       this.currentIndex = index
-      this.brandDetails = {
-        name: brand.name,
-        manufacturer: brand.manufacturer,
-        model: brand.model,
-        brand: brand.brand,
-        price: brand.price,
-        otherInfo: brand.otherInfo
+      this.radarData = [
+        car.appearance_score,
+        car.interior_score,
+        car.configure_score,
+        car.spatial_score,
+        car.comfort_score,
+        car.manipulating_score,
+        car.motivation_score
+      ]
+
+      // 查找当前车型的历史销量数据
+      this.currentCarHistoricalSales = this.historicalSales.filter(item => item.carName === car.carName)
+      this.historicalSalesData = this.currentCarHistoricalSales.map(item => item.monthly_sales)
+      this.historicalSalesLabels = this.currentCarHistoricalSales.map(item => item.years)
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--
       }
-      this.initHexagonChart()
-      this.initLineChart()
     },
-    addShadow(index) {
-      const li = document.querySelectorAll('.left-panel li')[index]
-      li.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)'
-    },
-    removeShadow(index) {
-      const li = document.querySelectorAll('.left-panel li')[index]
-      li.style.boxShadow = 'none'
-    },
-    initHexagonChart() {
-      const hexagonChart = echarts.init(document.getElementById('hexagonChart'))
-      hexagonChart.setOption({
-        title: {
-          text: '品牌指标',
-          textStyle: {
-            color: '#a09999'
-          }
-        },
-        radar: {
-          indicator: [
-            {
-              name: '销量',
-              max: 6500,
-              nameTextStyle: {
-                fontSize: 16 // Increase the font size to 16
-              }
-            },
-            {
-              name: '市场占有率',
-              max: 16000,
-              nameTextStyle: {
-                fontSize: 16
-              }
-            },
-            {
-              name: '客户满意度',
-              max: 30000,
-              nameTextStyle: {
-                fontSize: 16
-              }
-            },
-            {
-              name: '品牌影响力',
-              max: 38000,
-              nameTextStyle: {
-                fontSize: 16
-              }
-            },
-            {
-              name: '产品质量',
-              max: 52000,
-              nameTextStyle: {
-                fontSize: 16
-              }
-            },
-            {
-              name: '服务水平',
-              max: 25000,
-              nameTextStyle: {
-                fontSize: 16
-              }
-            }
-          ],
-        },
-        series: [
-          {
-            name: this.currentBrand.name,
-            type: 'radar',
-            data: [
-              {value: this.currentBrand.radarData, name: this.currentBrand.name}
-            ]
-          }
-        ],
-        tooltip: {
-          trigger: 'item',
-          formatter: (params) => {
-            return `${params.name}<br>
-          销量: ${params.value[0]}<br>
-          市场占有率: ${params.value[1]}%<br>
-          客户满意度: ${params.value[2]}<br>
-          品牌影响力: ${params.value[3]}<br>
-          产品质量: ${params.value[4]}<br>
-          服务水平: ${params.value[5]}`;
-          }
-        },
-        animationDuration: 2000,
-        animationEasing: 'elasticOut',
-        animationDelayUpdate: (idx) => idx * 100
-      })
-    },
-    initLineChart() {
-      const lineChart = echarts.init(document.getElementById('lineChart'))
-      lineChart.setOption({
-
-        xAxis: {
-          type: 'category',
-          data: ['2020', '2021', '2022', '2023'],
-          axisLabel: {
-            color: '#999999', // 设置 x 轴文字颜色为灰色
-            fontSize: 18,
-          }
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            color: '#999999',// 设置 y 轴文字颜色为灰色
-            fontSize: 18,
-
-          }
-        },
-        series: [
-          {
-            data: this.currentBrand.lineChartData,
-            type: 'line'
-          }
-        ],
-        tooltip: {
-          trigger: 'axis',
-          formatter: (params) => {
-            let str = `${params[0].name}<br>`;
-            for (let i = 0; i < params.length; i++) {
-              str += `销量: ${params[i].value}<br>`;
-            }
-            return str;
-          }
-        },
-        animationDuration: 1000,
-        animationEasing: 'linear',
-        animationDelay: (idx) => idx * 100
-      })
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++
+      }
     }
   }
 }
 </script>
-
 <style scoped>
 .brand-info-container {
   position: relative;
@@ -276,7 +146,6 @@ export default {
   flex: 0.5;
   background-color: transparent;
   padding: 20px;
-  margin-right: 20px;
   border: 1px solid #ccc;
   transition: transform 0.3s ease;
 }
@@ -299,8 +168,40 @@ export default {
   transition: background-color 0.3s ease;
 }
 
+.left-panel li.active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 .left-panel li:hover {
-  background-color: rgba(0, 0, 0, 1);
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.left-panel .brand-name {
+  font-size: 16px;
+}
+
+.left-panel .sales-volume {
+  font-size: 14px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .right-panel {
@@ -315,8 +216,7 @@ export default {
   transform: translateY(-5px);
 }
 
-.brand-info,
-.sales-history {
+.brand-info {
   margin-bottom: 20px;
 }
 
@@ -328,35 +228,79 @@ export default {
 .brand-info-left {
   flex: 1;
   margin-right: 20px;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.6;
 }
 
 .brand-info-left h3 {
-  font-size: 20px;
+  font-size: 35px;
   margin-bottom: 10px;
 }
 
-.brand-info-left p {
+.brand-info-left .car-info-row {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.brand-info-left .car-info-row p {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.car-image-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.car-image {
+  max-width: 100%;
+  height: auto;
 }
 
 .hexagon-chart {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
-.hexagon-chart,
-.line-chart {
-  border: 1px solid transparent;
-  border-radius: 4px;
+.hexagon-chart p {
+  margin-top: 20px;
+  font-size: 20px;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.left-panel ul {
+  list-style-type: none;
+  padding: 0;
 }
+
+.left-panel li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.left-panel li.active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.left-panel li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.left-panel .brand-name {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.left-panel .sales-volume {
+  font-size: 14px;
+}
+
 </style>

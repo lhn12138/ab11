@@ -14,6 +14,7 @@ urlpatterns = [
     path("data3/", views.data3, name='data3'),
     path("data2/", views.data2, name='data2'),
     path("data1/", views.data1, name='data1'),
+    path("data4/", views.data4, name='data4'),
     path("getData/", views.getData, name='getData'),
 
 ]

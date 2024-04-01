@@ -9,7 +9,6 @@ def read_csv_data4():
     for index, row in cleaned_data6.iterrows():
         row_data = {
             'carName': row['carName'],
-            'brand': row['brand'],
             'years': row['years'],
             'monthly_sales': row['monthly_sales'],
 
@@ -17,7 +16,3 @@ def read_csv_data4():
         data4.append(row_data)
 
     return data4
-
-d = read_csv_data4()
-for data in d:
-    print(data)

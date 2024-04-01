@@ -71,7 +71,7 @@ def predict_sales():
                     predicted_sales = int(model.predict(test_data)[0])
 
                     # 存储预测结果
-                    results.append((brand, car_model, price_range, energy_type, predicted_sales))
+                    results.append({"brand":brand, "car_model":car_model, "price_range":price_range, "energy_type":energy_type, "predicted_sales":predicted_sales})
 
 
     return results

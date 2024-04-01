@@ -26,7 +26,10 @@
           <option v-for="energyType in energyTypes" :value="energyType" :key="energyType">{{ energyType }}</option>
         </select>
       </div>
-      <button @click="predictSales" class="btn btn-primary">销量预测</button>
+      <div class="form-group">
+        <button @click="predictSales" class="btn btn-primary">销量预测</button>
+        <button @click="resetForm" class="btn btn-secondary">清空</button>
+      </div>
       <div v-if="showPredictedSales" class="result">
         预测销量: {{ predictedSales }}
       </div>
@@ -39,6 +42,7 @@ export default {
   name: "App1",
   data() {
     return {
+      data: [],
       brands: [],
       models: [],
       priceRanges: [],
@@ -54,10 +58,13 @@ export default {
   async created() {
     // 从后端获取初始数据
     const res = await this.$http.get("myapp/predict22/");
-    this.initData(res.data);
+    this.initData(res.data.List1);
   },
   methods: {
     initData(data) {
+      // 存储原始数据
+      this.data = data;
+
       // 初始化下拉框选项
       this.brands = [...new Set(data.map(item => item.brand))];
       this.models = [...new Set(data.map(item => item.car_model))];
@@ -74,28 +81,65 @@ export default {
       this.energyTypes = [...new Set(this.data.filter(item => item.car_model === this.selectedModel).map(item => item.energy_type))];
     },
     async predictSales() {
-      // 根据选择的条件从后端获取预测结果
-      const res = await this.$http.get("myapp/predict22/")
-      this.cars = res.data.List;
-    }
+      // 根据选择的条件从原始数据中筛选出对应的记录
+      let filteredData = this.data;
+      if (this.selectedBrand) {
+        filteredData = filteredData.filter(item => item.brand === this.selectedBrand);
+      }
+      if (this.selectedModel) {
+        filteredData = filteredData.filter(item => item.car_model === this.selectedModel);
+      }
+      if (this.selectedPriceRange) {
+        filteredData = filteredData.filter(item => item.price_range === this.selectedPriceRange);
+      }
+      if (this.selectedEnergyType) {
+        filteredData = filteredData.filter(item => item.energy_type === this.selectedEnergyType);
+      }
 
+      // 如果没有找到匹配的记录,则显示提示信息
+      if (filteredData.length === 0) {
+        this.predictedSales = "无法找到匹配的车型,请重新选择";
+        this.showPredictedSales = true;
+        return;
+      }
+
+      // 从筛选后的数据中找到与用户选择最接近的记录,并取出其预测销量
+      const closestMatch = filteredData.reduce((prev, curr) => {
+        const prevDiff = Math.abs(prev.predicted_sales - this.selectedPriceRange);
+        const currDiff = Math.abs(curr.predicted_sales - this.selectedPriceRange);
+        return currDiff < prevDiff ? curr : prev;
+      });
+      this.predictedSales = closestMatch.predicted_sales;
+      this.showPredictedSales = true;
+    },
+    resetForm() {
+      this.selectedBrand = null;
+      this.selectedModel = null;
+      this.selectedPriceRange = null;
+      this.selectedEnergyType = null;
+      this.predictedSales = null;
+      this.showPredictedSales = false;
+    }
   }
 }
 </script>
 <style>
 .container {
   max-width: 800px;
-  margin: 5px auto;
+  margin: 0 auto;
   padding: 2rem;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .form-control {
   display: block;
-  width: 100%;
+  width: 48%;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -127,10 +171,27 @@ export default {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.btn:hover {
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
   color: #fff;
   background-color: #0056b3;
   border-color: #004a9b;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  margin-left: 1rem;
+}
+
+.btn-secondary:hover {
+  color: #fff;
+  background-color: #5a6268;
+  border-color: #545b62;
 }
 
 .result {
