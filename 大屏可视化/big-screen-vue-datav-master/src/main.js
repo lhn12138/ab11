@@ -17,7 +17,6 @@ import $http from '@/api/index.js'
 //引入echart
 //4.x 引用方式
 import echarts from 'echarts'
-import axios from "axios";
 
 //5.x 引用方式为按需引用
 //希望使用5.x版本的话,需要在package.json中更新版本号,并切换引用方式
@@ -27,21 +26,14 @@ Vue.config.productionTip = false;
 Vue.prototype.$http = $http
 
 
+
+
+
+
 // 全局注册
 Vue.component('icon', Icon);
 Vue.use(dataV);
 // Vue.use(PortalVue);
-
-// 添加请求拦截器
-axios.interceptors.request.use(config => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-}, error => {
-    return Promise.reject(error);
-});
 
 new Vue({
     router,

@@ -47,12 +47,10 @@ export default {
     login() {
       login(this.username, this.password).then(resp => {
         if (resp.status === 200) {
-          const token = resp.data.token;
           this.showMessage = true;
           this.message = '登录成功';
           this.messageType = 'success';
           this.saveLoginStyles(); // 保存样式
-          localStorage.setItem('token', token);
           setTimeout(() => {
             // 登录成功的逻辑
             router.push('/analysis1');
