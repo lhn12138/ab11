@@ -1,5 +1,10 @@
 <template>
   <div class="register-container">
+    <div class="message-container" v-if="showMessage">
+      <div :class="['message', messageType]">
+        {{ message }}
+      </div>
+    </div>
     <h2>注册</h2>
     <form :model="form" @submit.prevent="register">
       <div class="form-group">
@@ -20,7 +25,7 @@
       <button type="submit">注册</button>
     </form>
     <p>
-      <router-link to="/login" >登录</router-link>
+      <router-link to="/login">登录</router-link>
     </p>
   </div>
 </template>
@@ -36,14 +41,18 @@ export default {
       form: {
         username: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+
       },
       usernameValid: true,
       usernameError: '',
       passwordValid: true,
       passwordError: '',
       confirmPasswordValid: true,
-      confirmPasswordError: ''
+      confirmPasswordError: '',
+      showMessage: false,
+      message: '',
+      messageType: ''
     }
   },
   methods: {
@@ -62,25 +71,22 @@ export default {
 
       // 4. 如果所有验证都通过,发送注册请求
       if (this.usernameValid && this.passwordValid && this.confirmPasswordValid) {
-        register(this.form.username,this.form.password).then(resp =>{
+        register(this.form.username, this.form.password).then(resp => {
           console.log(resp.status);
-          if (resp.status === 200){
-            router.push("/login")
-          }else {
+          if (resp.status === 200) {
+            this.showMessage = true;
+            this.message = '注册成功';
+            this.messageType = 'success';
+            setTimeout(() => {
+              // 登录成功的逻辑
+              router.push("/login");
+            }, 1000);
+          } else {
             alert("注册失败， 请重试")
           }
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err);
         })
-        // postRequest('/user/register', this.form)
-        //   .then(response => {
-        //     console.log('注册成功:', response);
-        //     // 可以在这里添加注册成功后的逻辑,如跳转到登录页面
-        //   })
-        //   .catch(error => {
-        //     console.error('注册失败:', error);
-        //     // 可以在这里添加注册失败后的逻辑,如显示错误信息
-        //   });
       }
     }
   }
@@ -101,6 +107,24 @@ body {
   align-items: center;
   height: 100vh;
   background-color: rgba(240, 240, 240, 0.8);
+}
+
+.message-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
+.message {
+  padding: 15px 20px;
+  border-radius: 5px;
+  color: #9fe821;
+  font-weight: 600;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #4CAF50;
 }
 
 .register-container {

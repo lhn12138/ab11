@@ -1,7 +1,7 @@
 <template>
   <div id="app1">
     <div class="container">
-      <h1>对品牌未上市的车进行周销量预测</h1>
+      <h1 style="font-size: 27px">对品牌未上市的车进行周销量预测</h1>
       <div class="form-group">
         <label>品牌:</label>
         <select v-model="selectedBrand" @change="onBrandChange" class="form-control">
@@ -27,8 +27,8 @@
         </select>
       </div>
       <div class="form-group">
-        <button @click="predictSales" class="btn btn-primary">销量预测</button>
-        <button @click="resetForm" class="btn btn-secondary">清空</button>
+        <button @click="predictSales" class="btn btn-primary" style="font-size: 25px">销量预测</button>
+        <button @click="resetForm" class="btn btn-secondary" style="font-size: 25px">清空</button>
       </div>
       <div v-if="showPredictedSales" class="result">
         预测销量: {{ predictedSales }}
@@ -76,9 +76,10 @@ export default {
       this.models = [...new Set(this.data.filter(item => item.brand === this.selectedBrand).map(item => item.car_model))];
     },
     onModelChange() {
-      // 根据选择的车型更新其他下拉框
-      this.priceRanges = [...new Set(this.data.filter(item => item.car_model === this.selectedModel).map(item => item.price_range))];
-      this.energyTypes = [...new Set(this.data.filter(item => item.car_model === this.selectedModel).map(item => item.energy_type))];
+      // 根据选择的车型更新价格区间和能源类型下拉框
+      const filteredData = this.data.filter(item => item.brand === this.selectedBrand && item.car_model === this.selectedModel);
+      this.priceRanges = [...new Set(filteredData.map(item => item.price_range))];
+      this.energyTypes = [...new Set(filteredData.map(item => item.energy_type))];
     },
     async predictSales() {
       // 根据选择的条件从原始数据中筛选出对应的记录
@@ -128,6 +129,7 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
+  background-color: rgba(19, 25, 47, 0.6);
 }
 
 .form-group {
@@ -135,6 +137,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 20px;
 }
 
 .form-control {

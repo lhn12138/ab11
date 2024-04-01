@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container">
+  <div class="login-container" :style="loginContainerStyles">
     <div class="message-container" v-if="showMessage">
       <div :class="['message', messageType]">
         {{ message }}
@@ -7,18 +7,18 @@
     </div>
     <h2>登录</h2>
     <form @submit.prevent="login">
-      <div class="form-group">
-        <label for="username">用户名:</label>
-        <input type="text" id="username" v-model="username" required>
+      <div class="form-group" :style="formGroupStyles">
+        <label for="username" :style="labelStyles">用户名:</label>
+        <input type="text" id="username" v-model="username" required :style="inputStyles">
       </div>
-      <div class="form-group">
-        <label for="password">密码:</label>
-        <input type="password" id="password" v-model="password" required>
+      <div class="form-group" :style="formGroupStyles">
+        <label for="password" :style="labelStyles">密码:</label>
+        <input type="password" id="password" v-model="password" required :style="inputStyles">
       </div>
-      <button type="submit">登录</button>
+      <button type="submit" :style="buttonStyles">登录</button>
     </form>
     <p>
-      <router-link to="/register">注册</router-link>
+      <router-link to="/register" :style="linkStyles">注册</router-link>
     </p>
   </div>
 </template>
@@ -26,6 +26,7 @@
 <script>
 import {login} from '@/api/user'
 import router from "@/router";
+import axios from "axios";
 
 export default {
   data() {
@@ -34,34 +35,79 @@ export default {
       password: '',
       showMessage: false,
       message: '',
-      messageType: ''
+      messageType: '',
+      loginContainerStyles: null,
+      formGroupStyles: null,
+      labelStyles: null,
+      inputStyles: null,
+      buttonStyles: null,
+      linkStyles: null
     }
   },
   methods: {
-    login() {
-      login(this.username, this.password).then(resp => {
-        if (resp.status === 200) {
+    async login() {
+      try {
+        const response = await axios.post('/api/login', {
+          username: this.username,
+          password: this.password
+        });
+        // 登录成功后保存 token
+        localStorage.setItem('token', response.data.token);
+        login(this.username, this.password).then(resp => {
+          if (resp.status === 200) {
+            this.showMessage = true;
+            this.message = '登录成功';
+            this.messageType = 'success';
+            this.saveLoginStyles(); // 保存样式
+            setTimeout(() => {
+              // 登录成功的逻辑
+              router.push('/analysis1');
+            }, 1000);
+          } else {
+            this.showMessage = true;
+            this.message = resp.data.message;
+            this.messageType = 'error';
+          }
+        }).catch(err => {
+          console.log(err);
           this.showMessage = true;
-          this.message = '登录成功';
-          this.messageType = 'success';
-          setTimeout(() => {
-            // 登录成功的逻辑
-            router.push('/analysis1');
-          }, 1000);
-
-        } else {
-          this.showMessage = true;
-          this.message = resp.data.message;
+          this.message = '登录失败,用户名或密码错误,请重试';
           this.messageType = 'error';
-        }
-      }).catch(err => {
-        console.log(err)
+        });
+      } catch (err) {
+        console.log(err);
         this.showMessage = true;
-        this.message = '登录失败,用户名或密码错误,请重试';
+        this.message = '登录失败,请重试';
         this.messageType = 'error';
-      });
+      }
+    },
+    saveLoginStyles() {
+      // 保存登录页面的样式状态
+      localStorage.setItem('loginContainerStyles', JSON.stringify(getComputedStyle(this.$el)));
+      localStorage.setItem('formGroupStyles', JSON.stringify(getComputedStyle(this.$el.querySelector('.form-group'))));
+      localStorage.setItem('labelStyles', JSON.stringify(getComputedStyle(this.$el.querySelector('label'))));
+      localStorage.setItem('inputStyles', JSON.stringify(getComputedStyle(this.$el.querySelector('input'))));
+      localStorage.setItem('buttonStyles', JSON.stringify(getComputedStyle(this.$el.querySelector('button'))));
+      localStorage.setItem('linkStyles', JSON.stringify(getComputedStyle(this.$el.querySelector('a'))));
+    },
+    restoreLoginStyles() {
+      // 在返回登录页面时恢复样式
+      this.loginContainerStyles = JSON.parse(localStorage.getItem('loginContainerStyles'));
+      this.formGroupStyles = JSON.parse(localStorage.getItem('formGroupStyles'));
+      this.labelStyles = JSON.parse(localStorage.getItem('labelStyles'));
+      this.inputStyles = JSON.parse(localStorage.getItem('inputStyles'));
+      this.buttonStyles = JSON.parse(localStorage.getItem('buttonStyles'));
+      this.linkStyles = JSON.parse(localStorage.getItem('linkStyles'));
     }
-
+  },
+  mounted() {
+    this.restoreLoginStyles();
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      // 在进入登录页面时恢复样式
+      vm.restoreLoginStyles();
+    });
   }
 }
 </script>

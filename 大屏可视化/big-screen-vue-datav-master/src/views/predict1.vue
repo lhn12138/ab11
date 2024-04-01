@@ -82,20 +82,21 @@ export default {
 
 <style>
 .container {
-  max-width: 400px;
-  max-height: 500px;
+  max-width: 300px;
+  max-height: 410px;
   margin: 0px auto;
-  border-radius: 8px;
+  border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  background-color: rgba(255, 255, 255, 0.18);
-  padding: 20px;
+  background-color: rgba(19, 25, 47, 0.6);
+  padding: 16px;
+  padding-top: 20px;
 }
 
 .title {
   text-align: center;
   margin-bottom: 2rem;
   color: #fcf8f8;
-  font-size: 2.5rem;
+  font-size: 2.0rem;
   font-weight: bold;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }

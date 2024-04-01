@@ -5,7 +5,7 @@ from .getPublicData import *
 
 def getBaseData():
     cars = list(getAllCars())
-    sumCar = 10550
+    sumCar = 16469
     highVolume = cars[0].saleVolume
     topCar = cars[0].carName
     # 车型

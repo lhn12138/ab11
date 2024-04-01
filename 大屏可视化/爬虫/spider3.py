@@ -17,8 +17,8 @@ class Spider3:
         self.init()
 
     def init(self):
-        if not os.path.exists('./temp3.csv'):
-            with open('./temp3.csv', 'w', newline='', encoding='utf-8') as wf:
+        if not os.path.exists('./temp33.csv'):
+            with open('./temp33.csv', 'w', newline='', encoding='utf-8') as wf:
                 writer = csv.writer(wf)
                 writer.writerow(["年月", "排名", "品牌LOGO", "国别", "品牌名称", "销量", "占品牌份额"])
 
@@ -39,6 +39,8 @@ class Spider3:
         try:
             # 排名
             td_elements = infoHTMLpath.xpath('//td[@class="xl-td-t1"][1]')
+            # logo
+            img_elements = infoHTMLpath.xpath('//td//a/img[contains(@src, "carlogo75")]')
             # 国别
             td_elements1 = infoHTMLpath.xpath('//td[@class="xl-td-t3"][1]')
             # 品牌名称
@@ -48,13 +50,16 @@ class Spider3:
             # 占品牌份额
             td_elements4 = infoHTMLpath.xpath('//td[@class="xl-td-t2"]/a')
 
-
-            for td1, td2, td3, td4, td5 in zip(td_elements, td_elements1, td_elements2, td_elements3, td_elements4,):
+            for td1, td2, td3, td4, td5, td6 in zip(td_elements, td_elements1, td_elements2, td_elements3, td_elements4,
+                                                    img_elements):
                 # 年月
                 car = [f"{year:04d}-{month:02d}"]
                 # 排名
                 text_content = td1.text.strip()
                 car.append(text_content)
+                # logo
+                img1 = td6.get('src')
+                car.append(img1)
                 # 国别
                 text_content1 = td2.text.strip()
                 car.append(text_content1)
@@ -69,12 +74,12 @@ class Spider3:
                 car.append(text_content3)
 
                 print(car)
-                # self.save_to_csv(car)
+                self.save_to_csv(car)
         except:
             pass
 
     def save_to_csv(self, resultData):
-        with open('./temp3.csv', 'a', newline='', encoding='utf-8') as f:
+        with open('./temp33.csv', 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
             writer.writerow(resultData)
 

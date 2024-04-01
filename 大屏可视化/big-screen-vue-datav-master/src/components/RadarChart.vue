@@ -14,15 +14,6 @@ export default {
       type: Array,
       required: true
     },
-    title: {
-      type: String,
-      default: '评分指标',
-      style: {
-        color: '#eae5e5',
-        fontSize: '30px',
-        fontWeight: 'bold'
-      }
-    },
     indicatorNames: {
       type: Array,
       default: () => ['外观', '内饰', '配置', '空间', '舒适性', '操控', '动力']

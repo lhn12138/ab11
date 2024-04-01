@@ -19,18 +19,20 @@
       <div class="row_list">
         <ul class="car_rank" :style="{maxHeight: '450px', overflowY: 'auto'}">
           <li class="header">
-            <div>销售排名</div>
-            <div>年月</div>
-            <div>品牌信息</div>
-            <div>销量</div>
+            <div style="font-size: 20px">销售排名</div>
+            <div style="font-size: 20px">年月</div>
+            <div style="font-size: 20px">Logo</div>
+            <div style="font-size: 20px">品牌信息</div>
+            <div style="font-size: 20px">销量</div>
           </li>
-          <li v-for="car in filteredCarData" :key="car.rank">
-            <div class="list_index1">{{ car.rank }}</div>
-            <div class="list_index">{{ car.years }}</div>
-            <div class="list_info">
+          <li v-for="car in sortedFilteredCarData" :key="`${car.years}-${car.brand}`">
+            <div class="list_index1" style="font-size: 25px">{{ car.rank }}</div>
+            <div class="list_index" style="font-size: 25px">{{ car.years }}</div>
+            <div class="list_img"><img :src="car.logo" alt=""></div>
+            <div class="list_info" style="font-size: 25px">
               <p>{{ car.country }}/{{ car.brand }}</p>
             </div>
-            <div class="list_saleVolume">{{ car.sales }}辆</div>
+            <div class="list_saleVolume" style="font-size: 25px">{{ car.sales }}辆</div>
           </li>
         </ul>
       </div>
@@ -43,27 +45,44 @@ export default {
   data() {
     return {
       CarData: [],
-      searchKeyword: ''
+      searchKeyword: '',
+      sortedFilteredCarData: []
     }
   },
   computed: {
     filteredCarData() {
-      if (!this.searchKeyword) {
-        return this.CarData.map((car, index) => ({...car, rank: index + 1}));
-      } else {
-        const keyword = this.searchKeyword.toLowerCase();
-        return this.CarData.filter(car =>
-            car.years.toString().includes(keyword) ||
-            car.country.toLowerCase().includes(keyword) ||
-            car.brand.toLowerCase().includes(keyword)
-        ).map((car, index) => ({...car, rank: index + 1}));
-      }
+      const keyword = this.searchKeyword.toLowerCase();
+      return this.CarData.filter(car =>
+        car.years.toString().includes(keyword) ||
+        car.country.toLowerCase().includes(keyword) ||
+        car.brand.toLowerCase().includes(keyword)
+      );
+    }
+  },
+  watch: {
+    filteredCarData() {
+      this.sortCarData();
     }
   },
   async mounted() {
     const res = await this.$http.get('myapp/data1');
-    this.CarData = res.data.carData2;
-    // console.log('CarData:', this.CarData);
+    this.CarData = res.data.carData2.sort((a, b) => {
+      const [yearA, monthA] = a.years.split('-').map(Number);
+      const [yearB, monthB] = b.years.split('-').map(Number);
+      if (yearA !== yearB) {
+        return yearB - yearA;
+      } else if (monthA !== monthB) {
+        return monthB - monthA;
+      } else {
+        return a.rank - b.rank;
+      }
+    });
+    this.sortCarData();
+  },
+  methods: {
+    sortCarData() {
+      this.sortedFilteredCarData = this.filteredCarData.slice();
+    }
   }
 };
 </script>
@@ -159,6 +178,14 @@ $box-width: 100%;
     font-size: 18px;
     line-height: 70px;
     font-weight: bold;
+  }
+
+  .car_rank .list_img {
+    width: 170px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .car_rank .list_index1 {

@@ -3,7 +3,8 @@
     "@vue/cli": "^5.0.8",
     "chart.js": "^4.4.2",
     "jquery": "^3.7.1",
-    "portal-vue": "^2.1.7"
+    "portal-vue": "^2.1.7",
+    "sweetalert2": "^11.10.7"
   },
   "devDependencies": {
     "@babel/core": "^7.24.3",

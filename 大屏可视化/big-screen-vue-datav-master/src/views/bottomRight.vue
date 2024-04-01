@@ -20,24 +20,20 @@
       <div class="row_list">
         <ul class="car_rank" :style="{maxHeight: '450px', overflowY: 'auto'}">
           <li class="header">
-
-            <div>销售排名</div>
-            <div>年份</div>
-            <div>图片</div>
-            <div>品牌信息</div>
-            <div>销量</div>
-
-
+            <div style="font-size: 20px">销售排名</div>
+            <div style="font-size: 20px">年份</div>
+            <div style="font-size: 20px">Logo</div>
+            <div style="font-size: 20px">品牌信息</div>
+            <div style="font-size: 20px">销量</div>
           </li>
-          <li v-for="car in filteredCarData" :key="car.rank">
-            <div class="list_index1">{{ car.rank }}</div>
-            <div class="list_index">{{ car.year }}</div>
+          <li v-for="(car, index) in sortedFilteredCarData" :key="index">
+            <div class="list_index1" style="font-size: 25px">{{ car.rank }}</div>
+            <div class="list_index" style="font-size: 25px">{{ car.year }}</div>
             <div class="list_img"><img :src="car.logo" alt=""></div>
-            <div class="list_info">
+            <div class="list_info" style="font-size: 25px">
               <p>{{ car.country }}/{{ car.brand }}</p>
             </div>
-            <div class="list_saleVolume">{{ car.sales }}辆</div>
-
+            <div class="list_saleVolume" style="font-size: 25px">{{ car.sales }}辆</div>
           </li>
         </ul>
       </div>
@@ -50,28 +46,40 @@ export default {
   data() {
     return {
       CarData: [],
-      searchKeyword: ''
+      searchKeyword: '',
+      sortedFilteredCarData: []
     }
   },
   computed: {
-
     filteredCarData() {
-      if (!this.searchKeyword) {
-        return this.CarData.map((car, index) => ({...car, rank: index + 1}));
-      } else {
-        const keyword = this.searchKeyword.toLowerCase();
-        return this.CarData.filter(car =>
-            car.year.toString().includes(keyword) ||
-            car.country.toLowerCase().includes(keyword) ||
-            car.brand.toLowerCase().includes(keyword)
-        ).map((car, index) => ({...car, rank: index + 1}));
-      }
+      const keyword = this.searchKeyword.toLowerCase();
+      return this.CarData.filter(car =>
+        car.year.toString().includes(keyword) ||
+        car.country.toLowerCase().includes(keyword) ||
+        car.brand.toLowerCase().includes(keyword)
+      );
+    }
+  },
+  watch: {
+    filteredCarData() {
+      this.sortCarData();
     }
   },
   async mounted() {
     const res = await this.$http.get('myapp/getData');
     this.CarData = res.data.carData1;
-    // console.log('CarData:', this.CarData);
+    this.sortCarData();
+  },
+  methods: {
+    sortCarData() {
+      this.sortedFilteredCarData = this.filteredCarData.slice().sort((a, b) => {
+        if (a.year !== b.year) {
+          return b.year - a.year;
+        } else {
+          return a.rank - b.rank;
+        }
+      });
+    }
   }
 };
 </script>

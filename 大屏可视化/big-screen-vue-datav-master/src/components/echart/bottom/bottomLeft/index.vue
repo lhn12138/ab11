@@ -1,13 +1,15 @@
 <template>
   <div>
-    <!--    <Chart :cdata="cdata" />-->
-    <div ref="chart" style="width: 100%;height: 480px" v-bind:key="cdata.lineData[0]"
+    <div class="search-container">
+      <input type="text" v-model="searchInput" placeholder="输入年月(如:2023-12)" @keyup.enter="searchData" />
+      <button @click="searchData">搜索</button>
+    </div>
+    <div ref="chart" style="width: 100%;height: 430px" v-bind:key="cdata.lineData[0]"
          @mouseenter="startAction" @mouseleave="cancelAction"></div>
   </div>
 </template>
 
 <script>
-// import Chart from './chart.vue'
 export default {
   data() {
     return {
@@ -18,11 +20,9 @@ export default {
         barData: [],
         rateData: []
       },
-      currentIndex: 0
+      currentIndex: 0,
+      searchInput: ""
     };
-  },
-  components: {
-    // Chart,
   },
   async mounted() {
     const res = await this.$http.get('myapp/data2')
@@ -36,10 +36,36 @@ export default {
   updated() {
     this.initChart()
     this.stratDataUpdateInterval()
-
   },
   methods: {
-
+    searchData() {
+      const searchYear = this.searchInput.split('-')[0];
+      const searchMonth = this.searchInput.split('-')[1];
+      const index = this.cdata.category.findIndex(item => {
+        const year = parseInt(item.split('-')[0]);
+        const month = parseInt(item.split('-')[1]);
+        return year === parseInt(searchYear) && month === parseInt(searchMonth);
+      });
+      if (index !== -1) {
+        this.currentIndex = index;
+        this.initChart();
+        this.highlightData();
+      } else {
+        alert('未找到该数据');
+      }
+    },
+    highlightData() {
+      this.myChart.dispatchAction({
+        type: 'highlight',
+        seriesIndex: 0,
+        dataIndex: this.currentIndex
+      });
+      this.myChart.dispatchAction({
+        type: 'highlight',
+        seriesIndex: 1,
+        dataIndex: this.currentIndex
+      });
+    },
     startAction() {
       this.isHovered = false
       this.stratDataUpdateInterval()
@@ -111,7 +137,8 @@ export default {
             },
 
             axisLabel: {
-              formatter: "{value} "
+              formatter: "{value} ",
+              fontSize:13,
             }
           },
           {
@@ -165,13 +192,6 @@ export default {
       }
       this.myChart.setOption(option)
     },
-    changeData(x) {
-      var st = x[0]
-      for (var i = 0; i < x.length - 1; i++) {
-        x[i] = x[i + 1]
-      }
-      x[x.length - 1] = st
-    },
     updateBarChart() {
       if (this.isHovered) {
         this.currentIndex = (this.currentIndex + 1) % this.cdata.category.length
@@ -214,4 +234,65 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+
+  input {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  button {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+}
+
+::v-deep .echarts-for-vue {
+  .echarts-tooltip-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .echarts-tooltip-item-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .echarts-tooltip-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .echarts-tooltip-marker {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .echarts-tooltip-value {
+      font-weight: bold;
+    }
+  }
+
+  .echarts-series-item-highlighted {
+    opacity: 1 !important;
+  }
+}
 </style>

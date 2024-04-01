@@ -39,10 +39,10 @@ export default {
     <!-- 第三行数据 -->
     <div class="content-box">
       <div>
-        <dv-border-box-8>
+        <dv-border-box-11>
           <app/>
 
-        </dv-border-box-8>
+        </dv-border-box-11>
       </div>
       <div>
         <dv-border-box-1>
