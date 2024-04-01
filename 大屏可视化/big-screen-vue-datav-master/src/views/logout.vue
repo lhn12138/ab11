@@ -11,6 +11,7 @@ export default {
   name: "Home",
   methods: {
     logout() {
+      localStorage.removeItem('isAuthenticated')
       this.$router.push('/login'); // 跳转回登录页面
     }
   }

@@ -50,9 +50,11 @@ export default {
           this.showMessage = true;
           this.message = '登录成功';
           this.messageType = 'success';
+          localStorage.setItem('isAuthenticated', true)
           this.saveLoginStyles(); // 保存样式
           setTimeout(() => {
             // 登录成功的逻辑
+
             router.push('/analysis1');
           }, 1000);
         } else {

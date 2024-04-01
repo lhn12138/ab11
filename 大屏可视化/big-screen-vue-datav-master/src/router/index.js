@@ -38,7 +38,8 @@ const routes = [
                 name: 'analysis3',
                 component: () => import('../views/analysis3.vue')
             }
-        ]
+        ],
+        meta: { requiresAuth: true } // 添加此行,表示需要登录认证
     }]
 const router = new VueRouter({
     mode: 'history',
@@ -47,4 +48,17 @@ const router = new VueRouter({
 
 })
 
+// 添加以下代码,用于登录拦截
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = localStorage.getItem('isAuthenticated')
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next('/login')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
+})
 export default router
