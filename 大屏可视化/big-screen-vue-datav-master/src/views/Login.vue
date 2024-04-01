@@ -24,9 +24,8 @@
 </template>
 
 <script>
-import {login} from '@/api/user'
+import { login } from '@/api/user'
 import router from "@/router";
-import axios from "axios";
 
 export default {
   data() {
@@ -45,41 +44,28 @@ export default {
     }
   },
   methods: {
-    async login() {
-      try {
-        const response = await axios.post('/api/login', {
-          username: this.username,
-          password: this.password
-        });
-        // 登录成功后保存 token
-        localStorage.setItem('token', response.data.token);
-        login(this.username, this.password).then(resp => {
-          if (resp.status === 200) {
-            this.showMessage = true;
-            this.message = '登录成功';
-            this.messageType = 'success';
-            this.saveLoginStyles(); // 保存样式
-            setTimeout(() => {
-              // 登录成功的逻辑
-              router.push('/analysis1');
-            }, 1000);
-          } else {
-            this.showMessage = true;
-            this.message = resp.data.message;
-            this.messageType = 'error';
-          }
-        }).catch(err => {
-          console.log(err);
+    login() {
+      login(this.username, this.password).then(resp => {
+        if (resp.status === 200) {
           this.showMessage = true;
-          this.message = '登录失败,用户名或密码错误,请重试';
+          this.message = '登录成功';
+          this.messageType = 'success';
+          this.saveLoginStyles(); // 保存样式
+          setTimeout(() => {
+            // 登录成功的逻辑
+            router.push('/analysis1');
+          }, 1000);
+        } else {
+          this.showMessage = true;
+          this.message = resp.data.message;
           this.messageType = 'error';
-        });
-      } catch (err) {
-        console.log(err);
+        }
+      }).catch(err => {
+        console.log(err)
         this.showMessage = true;
-        this.message = '登录失败,请重试';
+        this.message = '登录失败,用户名或密码错误,请重试';
         this.messageType = 'error';
-      }
+      });
     },
     saveLoginStyles() {
       // 保存登录页面的样式状态
