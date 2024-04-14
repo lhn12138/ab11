@@ -38,16 +38,16 @@ export default {
   <div class="body-box">
     <!-- 第三行数据 -->
     <div class="content-box">
-      <div>
-        <dv-border-box-11>
-          <app/>
 
-        </dv-border-box-11>
-      </div>
       <div>
         <dv-border-box-1>
           <centerLeft2/>
         </dv-border-box-1>
+      </div>
+      <div>
+        <dv-border-box-11>
+          <app/>
+        </dv-border-box-11>
       </div>
       <!-- 中间 -->
       <div>

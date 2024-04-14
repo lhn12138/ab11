@@ -51,7 +51,6 @@ class spiders(object):
         pageJson = requests.get(self.spiderUrl, headers=self.headers, params=params).json()
         pageJson = pageJson['data']['list']
         try:
-
             for index, car in enumerate(pageJson):
                 carData = []
                 print("正在爬取第%d" % (index + 1) + "数据")

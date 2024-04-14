@@ -46,7 +46,11 @@ export default {
     return {
       CarData: [],
       searchKeyword: '',
-      sortedFilteredCarData: []
+      sortedFilteredCarData: [],
+      carDataCache: [],
+      currentPage: 1,
+      pageSize: 10,
+      totalPages: 0
     }
   },
   computed: {
@@ -65,23 +69,33 @@ export default {
     }
   },
   async mounted() {
-    const res = await this.$http.get('myapp/data1');
-    this.CarData = res.data.carData2.sort((a, b) => {
-      const [yearA, monthA] = a.years.split('-').map(Number);
-      const [yearB, monthB] = b.years.split('-').map(Number);
-      if (yearA !== yearB) {
-        return yearB - yearA;
-      } else if (monthA !== monthB) {
-        return monthB - monthA;
-      } else {
-        return a.rank - b.rank;
-      }
-    });
+    await this.fetchCarData(1);
     this.sortCarData();
   },
   methods: {
+    async fetchCarData(page) {
+      const res = await this.$http.get(`myapp/data1?page=${page}&pageSize=${this.pageSize}`);
+      this.CarData = res.data.carData2.sort((a, b) => {
+        const [yearA, monthA] = a.years.split('-').map(Number);
+        const [yearB, monthB] = b.years.split('-').map(Number);
+        if (yearA !== yearB) {
+          return yearB - yearA;
+        } else if (monthA !== monthB) {
+          return monthB - monthA;
+        } else {
+          return a.rank - b.rank;
+        }
+      });
+      this.carDataCache = this.CarData;
+      this.currentPage = page;
+      this.totalPages = Math.ceil(res.data.totalCount / this.pageSize);
+    },
     sortCarData() {
       this.sortedFilteredCarData = this.filteredCarData.slice();
+    },
+    async changePage(page) {
+      await this.fetchCarData(page);
+      this.sortCarData();
     }
   }
 };

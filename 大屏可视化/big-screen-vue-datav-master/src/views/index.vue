@@ -31,13 +31,13 @@
               <span class="react-left"></span>
               <span class="text" style="font-size:30px;cursor: pointer" @click="$router.push('/analysis1')">首页</span>
             </div>
-            <div class="react-left ml-3" style="cursor: pointer">
-              <span class="text" style="cursor: pointer" @click="$router.push('/analysis2')">数据分析2</span>
+            <div class="react-left ml-3" style="cursor: pointer;background-color: #1a5cd7">
+              <span class="text" style="cursor: pointer" @click="$router.push('/analysis2')">历史销量</span>
             </div>
           </div>
           <div class="d-flex aside-width">
             <div class="react-right bg-color-blue mr-3">
-              <span class="text fw-b" style="cursor: pointer" @click="$router.push('/analysis3')">数据分析3</span>
+              <span class="text fw-b" style="cursor: pointer" @click="$router.push('/analysis3')">详细车型信息</span>
             </div>
             <div class="react-right mr-4 react-l-s">
               <span class="react-after"></span>

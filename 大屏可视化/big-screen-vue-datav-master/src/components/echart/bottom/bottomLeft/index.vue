@@ -239,23 +239,27 @@ export default {
   justify-content: flex-end;
   margin-bottom: 20px;
 
+
   input {
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
     margin-right: 10px;
+    background-color: #1c2138;
+    color: white;
   }
 
   button {
     padding: 5px 10px;
-    background-color: #4CAF50;
+    background-color: #0637d9;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
   }
+
 }
 
 ::v-deep .echarts-for-vue {
@@ -294,5 +298,8 @@ export default {
   .echarts-series-item-highlighted {
     opacity: 1 !important;
   }
+}
+  .search-container input::placeholder {
+  color: #fff; /* 设置placeholder文字颜色为白色 */
 }
 </style>

@@ -99,8 +99,10 @@ export default {
       config: {
         data: [],
         waitTime: 1000
-      }
-
+      },
+      // 添加缓存
+      carDataCache: null,
+      historicalSalesCache: null
     }
   },
   computed: {
@@ -132,15 +134,24 @@ export default {
   },
   methods: {
     async fetchCarData() {
-      const res = await this.$http.get('myapp/bottomRight')
-      this.carData = res.data.carData
+      // 先检查缓存
+      if (this.carDataCache && this.historicalSalesCache) {
+        this.carData = this.carDataCache;
+        this.historicalSales = this.historicalSalesCache;
+        this.parseComprehensiveEvaluation(this.carData[0].comprehensive_evaluation);
+        this.updateCurrentCar(this.carData[0], 0);
+      } else {
+        const res = await this.$http.get('myapp/bottomRight')
+        this.carData = res.data.carData;
+        this.carDataCache = res.data.carData; // 缓存数据
 
-      const salesData = await this.$http.get('myapp/data4')
-      this.historicalSales = salesData.data.carData4
+        const salesData = await this.$http.get('myapp/data4')
+        this.historicalSales = salesData.data.carData4;
+        this.historicalSalesCache = salesData.data.carData4; // 缓存数据
 
-      this.parseComprehensiveEvaluation(res.data.carData[0].comprehensive_evaluation)
-
-      this.updateCurrentCar(this.carData[0], 0)
+        this.parseComprehensiveEvaluation(this.carData[0].comprehensive_evaluation);
+        this.updateCurrentCar(this.carData[0], 0);
+      }
     },
     updateCurrentCar(car, index) {
       this.currentCar = car;
@@ -230,6 +241,7 @@ export default {
 
 .left-panel .search-box {
   margin-bottom: 20px;
+
 }
 
 .left-panel .search-box input {
@@ -238,6 +250,11 @@ export default {
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  background-color: #1c2138;
+  color: white;
+}
+.left-panel .search-box input::placeholder {
+  color: #faf7f7; /* 设置placeholder文字颜色为白色 */
 }
 
 .left-panel ul {

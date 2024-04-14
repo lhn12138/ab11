@@ -65,7 +65,7 @@ export default {
       }).catch(err => {
         console.log(err)
         this.showMessage = true;
-        this.message = '登录失败,用户名或密码错误,请重试';
+        this.message = '您的使用者名称或密码不正确，无法登录，请再试一次';
         this.messageType = 'error';
       });
     },

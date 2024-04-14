@@ -111,6 +111,7 @@ $box-height: 410px;
   }
   .text {
     color: #c3cbde;
+
   }
   .dv-dec-3 {
     position: relative;
@@ -124,7 +125,7 @@ $box-height: 410px;
       & > div {
         padding-right: 5px;
       }
-      font-size: 14px;
+      font-size: 18px;
       float: right;
       position: relative;
       width: 50%;

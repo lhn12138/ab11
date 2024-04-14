@@ -52,15 +52,23 @@ export default {
       selectedPriceRange: null,
       selectedEnergyType: null,
       predictedSales: null,
-      showPredictedSales: false
+      showPredictedSales: false,
+      dataCache: []
     }
   },
   async created() {
-    // 从后端获取初始数据
-    const res = await this.$http.get("myapp/predict22/");
-    this.initData(res.data.List1);
+    await this.fetchData();
   },
   methods: {
+    async fetchData() {
+      if (this.dataCache.length === 0) {
+        const res = await this.$http.get("myapp/predict22/");
+        this.initData(res.data.List1);
+        this.dataCache = res.data.List1;
+      } else {
+        this.initData(this.dataCache);
+      }
+    },
     initData(data) {
       // 存储原始数据
       this.data = data;
@@ -82,6 +90,18 @@ export default {
       this.energyTypes = [...new Set(filteredData.map(item => item.energy_type))];
     },
     async predictSales() {
+      // 检查是否所有下拉框都有选择
+      if (
+          this.selectedBrand === null ||
+          this.selectedModel === null ||
+          this.selectedPriceRange === null ||
+          this.selectedEnergyType === null
+      ) {
+        this.predictedSales = "请选择所有筛选条件后再进行预测";
+        this.showPredictedSales = true;
+        return;
+      }
+
       // 根据选择的条件从原始数据中筛选出对应的记录
       let filteredData = this.data;
       if (this.selectedBrand) {
@@ -146,8 +166,8 @@ export default {
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
-  color: #495057;
-  background-color: #fff;
+  color: #f2f5f8;
+  background-color: #1c2138;
   background-clip: padding-box;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;

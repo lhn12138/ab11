@@ -55,10 +55,10 @@ export default {
           ],
           tooltip: {
             trigger: "item",
-            formatter: "{a} <br/>{b} : {c} ({d}%)"
+            formatter: "{a} <br/>{b} : {c} ({d}%)",
           },
           toolbox: {
-            show: true
+            show: true,
           },
           calculable: true,
           legend: {
@@ -68,7 +68,8 @@ export default {
             x: "center",
             data: this.cdata.seriesData.map(item => item.name),
             textStyle: {
-              color: "#fff"
+              color: "#fff",
+            fontSize:18
             }
           },
           series: [
@@ -84,7 +85,7 @@ export default {
                   shadowBlur:10,
                   shadowOffsetX:0,
                   lable: {
-                    show: true
+                    show: true,
                   }
               }
 

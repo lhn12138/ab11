@@ -14,14 +14,9 @@ def get_img(field, targetImageSrc, resImageSrc):
     cusor.execute(sql)
     data = cusor.fetchall()
 
-    text = ''
-    for i in data:
-        if i[0] != '':
-            tagArr = i
-            for j in tagArr:
-                text += j
-    cusor.close()
-    con.close()
+    text = ''.join([str(item) for row in data for item in row])
+    text = text.replace('汽车', '')
+
     data_cut = jieba.cut(text, cut_all=False)
     string = ' '.join(data_cut)
 

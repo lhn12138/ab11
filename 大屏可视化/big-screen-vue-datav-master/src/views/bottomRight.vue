@@ -47,7 +47,8 @@ export default {
     return {
       CarData: [],
       searchKeyword: '',
-      sortedFilteredCarData: []
+      sortedFilteredCarData: [],
+      carDataCache: []
     }
   },
   computed: {
@@ -66,11 +67,19 @@ export default {
     }
   },
   async mounted() {
-    const res = await this.$http.get('myapp/getData');
-    this.CarData = res.data.carData1;
+    await this.fetchCarData();
     this.sortCarData();
   },
   methods: {
+    async fetchCarData() {
+      if (this.carDataCache.length === 0) {
+        const res = await this.$http.get('myapp/getData');
+        this.CarData = res.data.carData1;
+        this.carDataCache = res.data.carData1;
+      } else {
+        this.CarData = this.carDataCache;
+      }
+    },
     sortCarData() {
       this.sortedFilteredCarData = this.filteredCarData.slice().sort((a, b) => {
         if (a.year !== b.year) {
@@ -130,6 +139,7 @@ $box-width: 100%;
   top: 10px;
   right: 10px;
   z-index: 1; // 添加这一行
+  background-color: #1c2138;
 }
 
 .large-input {
@@ -137,8 +147,12 @@ $box-width: 100%;
   width: 200px; /* 调整宽度 */
   border: 1px solid #ccc;
   border-radius: 5px;
+  background-color: #1c2138;
+  color: white;
 }
-
+.search-box input::placeholder {
+  color: #fff; /* 设置placeholder文字颜色为白色 */
+}
 .row_list {
   list-style: none;
   padding-top: 5px; // 添加这一行
@@ -212,4 +226,5 @@ $box-width: 100%;
     line-height: 60px;
   }
 }
+
 </style>

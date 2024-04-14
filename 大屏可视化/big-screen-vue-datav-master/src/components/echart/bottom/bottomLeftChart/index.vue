@@ -34,16 +34,12 @@ export default {
     this.$set(this.cdata, 'category', res.data.yearList)
     this.$set(this.cdata, 'lineData', res.data.rateList)
     this.$set(this.cdata, 'barData', res.data.volumeList)
-
   },
-
   updated() {
     this.initChart()
     this.stratDataUpdateInterval()
-
   },
   methods: {
-
     startAction() {
       this.isHovered = false
     },
@@ -195,13 +191,9 @@ export default {
             }
           ],
         })
-
       } else {
         clearInterval(this.timer)
-
       }
-
-
     },
     stratDataUpdateInterval() {
       if (this.isHovered == true) {
@@ -210,7 +202,6 @@ export default {
         setInterval(this.updateBarChart, interval)
       }
     }
-
   }
 };
 </script>
